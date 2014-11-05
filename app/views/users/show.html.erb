@@ -1,0 +1,83 @@
+<% content_for :title do %>
+  <i class="fa fa-<%= if @user.role? :user then 'user' else 'envelope' end %>"></i>
+  <%= @user.email %>
+<% end %>
+<% content_for :subtitle, t(:details) %>
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-md-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li><a href="<%= users_path %>"><i class="fa fa-group"></i> <%= t :users %></a></li>
+        <li class="active"><i class="fa fa-<%= if @user.role? :user then 'user'
+else 'envelope' end %>"></i> <%= @user.email %></a></li>
+      </ol>
+    </div>
+    <div class="col-md-2">
+      <a href="<%= edit_user_path(@user) %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @user %>">
+        <i class="fa fa-edit"></i>
+        <%= t :edit %>
+      </a>
+    </div>
+  </div>
+<% end %>
+
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <th><i class="fa fa-envelope"></i> <%= t :email %></th>
+      <td><%= @user.email %></td>
+    </tr>
+    <tr>
+      <th><i class="fa fa-shield"></i> <%= t :role %></th>
+      <td><%= @user.role %></td>
+    </tr>
+    <% @user.user_channels.select{ |uc| can? :read, uc.channel }.each do |uc| %>
+    <tr>
+      <th>
+        <i class="fa fa-desktop"></i>
+        <%= uc.channel.name %>
+      </th>
+
+      <td>
+        <% if can? :manage, User %>
+          <% role = nil %>
+          <fieldset class="btn-group form-inline role_fieldset" data-toggle="buttons" disabled>
+            <label class="btn btn-default <%= 'btn-primary' if uc.role == 'admin' %>">
+              <i class="fa fa-edit"></i>
+              <span class="hidden-xs"><%= t :admin %></span>
+            </label>
+            <label class="btn btn-default <%= 'btn-primary' if uc.role == 'user' %>">
+              <i class="fa fa-eye"></i>
+              <span class="hidden-xs"><%= t :user %></span>
+            </label>
+            <label class="btn btn-default <%= 'btn-primary' if uc.role == 'contact' %>">
+              <i class="fa fa-times"></i>
+              <span class="hidden-xs"><%= t :deny %></span>
+            </label>
+          </fieldset>
+        <% end %>
+
+        <% success = @user.success_channels.include?(uc.channel) %>
+        <% error = @user.error_channels.include?(uc.channel) %>
+
+        <fieldset class="btn-group form-inline" data-toggle="buttons" disabled>
+          <label class="btn btn-default <%= 'btn-success' if success %>">
+            <span class="<%= 'text-success' unless success %>">
+              <i class="fa fa-envelope"></i>
+              <span class="hidden-xs"><%= t :success_notify %></span>
+            </span>
+          </label>
+          <label class="btn btn-default <%= 'btn-danger' if error %>">
+            <span class="<%= 'text-danger' unless error %>">
+              <i class="fa fa-envelope"></i>
+              <span class="hidden-xs"><%= t :error_notify %></span>
+            </span>
+          </label>
+        </fieldset>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+

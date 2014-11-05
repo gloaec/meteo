@@ -1,0 +1,194 @@
+<% @channel_ftp = @channel.channel_ftps.new(success_path: '/') %>
+
+<%= form_for [@channel, @channel_ftp], html: { class: 'form-horizontal' } do |f| %>
+
+  <div class="modal fade" id="ftp_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">
+            <i class="fa fa-sitemap"></i>
+            <%= t :add_ftp %>
+          </h4>
+        </div>
+	<div class="modal-body">
+          <div class="form-group">
+            <%= f.label :ftp_id, t(:ftp), class: 'control-label col-sm-3' %>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-sitemap"></i></span>
+                <%= f.select :ftp_id, [["Create new FTP", 0]] + @ftps.collect {|x| ["#{x.user}@#{x.host}",x.id]}, {}, { class: "form-control" } %>
+              </div>
+            </div>
+          </div>
+          <%= f.fields_for :ftp, Ftp.new do |ff| %>
+            <div class="form-group">
+              <%= ff.label :user, class: 'control-label col-sm-3' %>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <%= ff.text_field :user, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= ff.label :password, class: 'control-label col-sm-3' %>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                  <%= ff.password_field :password, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= ff.label :host, 'Host:Port', class: 'control-label col-sm-3' %>
+              <div class="col-sm-9">
+                <div class="input-group">
+                    <span class="input-group-addon">@</span>
+                    <%= ff.text_field :host, class: 'form-control' %>
+                    <span class="input-group-addon">:</span>
+                    <%= ff.number_field :port, class: 'form-control', size: 5 %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= ff.label :passive, class: 'control-label col-sm-3' do %><%= t :passive_mode %><% end %>
+              <fieldset class="col-sm-6">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-mode" value="1"><%= t :enabled %></button>
+                  <button type="button" class="btn btn-default btn-mode" value="0"><%= t :disabled %></button>
+                </div>
+                <%= ff.check_box :passive, class: 'hidden' %>
+              </fieldset>
+	      <div class="col-sm-3">
+  	        <button id="ping_ftp" data-loading-text="Loading..." type="button" class="btn btn-info btn-ping pull-right">
+                  <i class="fa fa-signal"></i>
+  	          <%= t :ping_ftp %>
+  	        </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :success_path, t(:success_path), class: 'control-label col-sm-3' %>
+              <div class="col-sm-9">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-folder-o"></i></span>
+                    <%= f.text_field :success_path, class: 'form-control' %>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          <% end %>
+          <%#= render partial: 'ftps/form', locals: { f: f } %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">
+            <i class="fa fa-plus"></i>
+            <%= t :add_ftp %>
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<% end %>
+
+<script type="text/javascript">
+  (function($){
+
+    function form_ftp(){
+      return {
+        id:               $('#channel_ftp_ftp_id')                 .val(), 
+        user:             $('#channel_ftp_ftp_attributes_user')    .val(), 
+        host:             $('#channel_ftp_ftp_attributes_host')    .val(),
+        port:             $('#channel_ftp_ftp_attributes_port')    .val(),
+        password_digest:  $('#channel_ftp_ftp_attributes_password').val(),
+        password:         $('#channel_ftp_ftp_attributes_password').val(),
+        passive:          $('#channel_ftp_ftp_attributes_passive') .val()
+      }
+    }
+
+    var ftp_bkp = form_ftp();
+    var ftps = <%= @ftps.to_json.html_safe %>;
+
+    $("#ping_ftp").on('click', function(e){
+      $('.btn-ping').button('loading');	    
+      e.preventDefault();
+      var $form = $("#channel_form");
+      $.post("<%= ftps_ping_path(format: :json) %>", { 
+        action: "ping",
+        ftp: form_ftp()
+      }).done(function(data){
+        if(data.response){
+	  $('.btn-ping')
+	  .button('reset').empty()
+	  .removeClass('btn-info btn-danger')
+	  .addClass('btn-success')
+	  .append($('<i>').addClass('fa fa-link'))
+	  .append(' Working');
+	} else {
+	  $('.btn-ping')
+	  .button('reset').empty()
+	  .removeClass('btn-info btn-success')
+	  .addClass('btn-danger')
+	  .append($('<i>').addClass('fa fa-unlink'))
+	  .append(' Error');
+	}
+        setTimeout(function(){
+          $('.btn-ping')
+          .button('reset').empty()
+          .removeClass('btn-success btn-danger')
+          .addClass('btn-info')
+          .append($('<i>').addClass('fa fa-signal'))
+          .append(' Ping Ftp');
+        }, 3000);
+      }).error(function(){
+	  $('.btn-ping')
+	  .button('reset').empty()
+	  .removeClass('btn-info btn-success')
+	  .addClass('btn-danger')
+	  .append($('<i>').addClass('fa fa-unlink'))
+	  .append(' Error');
+      });
+    });
+
+    $('.btn-mode').each(function(){
+      if ($(this).val() == "1" && $('#passive').is(':checked') ||
+          $(this).val() == "0" && !$('#passive').is(':checked') ){
+        $(this).addClass('active');
+      }
+    })
+    .click(function(){
+      $('#passive').prop('checked', $(this).val() == "1");
+      $('.btn-mode').removeClass('active');
+      $(this).addClass('active');
+    });
+     
+
+    $('#channel_ftp_ftp_id').change(function(){
+      var id = $(this).val();
+      if(id == 0){
+        $('#channel_ftp_ftp_attributes_user')    .prop('disabled', false).val(ftp_bkp.user)
+        $('#channel_ftp_ftp_attributes_host')    .prop('disabled', false).val(ftp_bkp.host)
+        $('#channel_ftp_ftp_attributes_port')    .prop('disabled', false).val(ftp_bkp.port)
+        $('#channel_ftp_ftp_attributes_password').prop('disabled', false).val(ftp_bkp.password_digest)
+        $('#channel_ftp_ftp_attributes_passive').parent().prop('disabled', false).val(ftp_bkp.passive)
+      } else {
+        var ftp = null;
+        ftp_bkp = form_ftp();
+        $.each(ftps, function(k,v){
+          if(v.id == id) ftp = v
+        }); 
+        $('#channel_ftp_ftp_attributes_user')    .prop('disabled', true).val(ftp.user)
+        $('#channel_ftp_ftp_attributes_host')    .prop('disabled', true).val(ftp.host)
+        $('#channel_ftp_ftp_attributes_port')    .prop('disabled', true).val(ftp.port)
+        $('#channel_ftp_ftp_attributes_password').prop('disabled', true).val(ftp.password_digest)
+        $('#channel_ftp_ftp_attributes_passive').parent().prop('disabled', true).val(ftp.passive)
+      }
+    }).trigger('change');
+
+  }(jQuery));
+</script>

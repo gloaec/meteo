@@ -1,0 +1,130 @@
+<% content_for :title do %>
+  <i class="fa fa-group"></i> 
+  <%= t :users %>
+<% end %>
+<% content_for :subtitle, 'Overview' %>
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-md-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li class="active"><i class="fa fa-group"></i> <%= t :users %></li>
+      </ol>
+    </div>
+    <div class="col-md-2">
+      <a href="<%= new_user_path %>" class="btn btn-success btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :create, User %>">
+        <i class="fa fa-plus"></i>
+        <%= t :new_user %>
+      </a>
+    </div>
+  </div>
+<% end %>
+
+  <!--legend>Legend</legend>
+  <dl class="dl-horizontal">
+    <dt><i class="fa fa-user"></i></dt>
+    <dd><%= t :user_allowed_to_log_in %></dd>
+    <dt><i class="fa fa-envelope"></i></dt>
+    <dd><%= t :user_not_allowed_to_log_in %></dd>
+    <dt><i class="fa fa-envelope text-success"></i></dt>
+    <dd><%= t :user_suscribed_to_success_notification_on_channel %></dd>
+    <dt><i class="fa fa-envelope text-danger"></i></dt>
+    <dd><%= t :user_suscribed_to_error_notification_on_channel %></dd>
+    <dt><i class="fa fa-edit"></i></dt>
+    <dd><%= t :user_allowed_to_manage_channel %></dd>
+    <dt><i class="fa fa-eye"></i></dt>
+    <dd><%= t :user_allowed_to_consult_channel %></dd>
+    <dt><i class="fa fa-times"></i></dt>
+    <dd><%= t :user_not_allowed_to_consult_channel %></dd>
+  </dl-->
+
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          <%= t :legend %>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+      <div class="panel-body">
+        <span class="col-md-6">
+          <i class="fa fa-user"></i> <%= t :user_allowed_to_log_in %>
+        </span>
+        <span class="col-md-6">
+          <i class="fa fa-envelope"></i> <%= t :user_not_allowed_to_log_in %>
+        </span>
+        <span class="col-md-6">
+          <i class="fa fa-envelope text-success"></i> <%= t :user_suscribed_to_success_notification_on_channel %>
+        </span>
+        <span class="col-md-6">
+          <i class="fa fa-envelope text-danger"></i> <%= t :user_suscribed_to_error_notification_on_channel %>
+        </span>
+        <span class="col-md-6">
+          <i class="fa fa-edit"></i> <%= t :user_allowed_to_manage_channel %>
+        </span>
+        <span class="col-md-6">
+          <i class="fa fa-eye"></i> <%= t :user_allowed_to_consult_channel %>
+        </span>
+        <span class="col-md-6">
+          <i class="fa fa-times"></i> <%= t :user_not_allowed_to_consult_channel %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<table class="table table-condensed table-striped top20">
+  <thead>
+    <th>Email</th>
+    <th>Role</th>
+    <% Channel.all.each do |channel| %>
+      <th><%= channel.name %></th>
+    <% end %>
+    <td>&nbsp;</td>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>  
+        <td>
+          <a href="<%= user_path(user) %>">
+            <i class="fa fa-<%= if user.role? :user then 'user' else 'envelope' end %>"></i>
+            <%= user.email %>
+          </a>
+        </td>
+        <td><%= user.role %></td>
+        <% Channel.all.each do |channel| %>
+          <td>
+            <% if user.can? :edit, channel %>
+              <i class="fa fa-edit"></i>
+            <% elsif user.can? :read, channel %>
+              <i class="fa fa-eye"></i>
+            <% else %>
+              <i class="fa fa-times"></i>
+            <% end %>
+            <% if channel.success_contacts.include?(user) %>
+              <i class="fa fa-envelope text-success"></i>
+            <% end %>
+            <% if channel.error_contacts.include?(user) %>
+              <i class="fa fa-envelope text-danger"></i>
+            <% end %>
+          </td>
+        <% end %>
+        <td class="text-right">
+          <% if can? :edit, user %>
+            <a href="<%= edit_user_path(user) %>" class="btn btn-primary btn-xs">
+              <i class="fa fa-edit"></i><span class="hidden-xs"> <%= t :edit %></span>
+            </a>
+          <% end %>
+          <% if can? :destroy, user %>
+            <%= link_to user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' do %>
+              <i class="fa fa-trash-o"></i><span class="hidden-xs"> <%= t :delete %></span>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

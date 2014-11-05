@@ -1,0 +1,96 @@
+<div class="top20">
+  <table class="table table-striped table-condensed">
+    <tbody>
+      <tr>
+        <th>Queue path</th>
+        <td><code class="ww"><%= channel.queue_path %></code></td>
+      </tr>
+      <tr>
+        <th>Error path</th>
+        <td><code class="ww"><%= channel.error_path %></code></td>
+      </tr>
+  </table>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <i class="fa fa-upload"></i>
+          FTP Transfert
+        </h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-condensed no-margins">
+          <tbody>
+            <% channel.channel_ftps.each do |cf| %>
+              <% ftp = cf.ftp %>
+              <tr>
+                <td>
+                <i class="fa fa-sitemap"></i>
+                <code class="ww"><%= ftp.user %></code>
+                @
+                <code class="ww"><%= ftp.host %></code>
+                :
+                <code class="ww"><%= ftp.port %></code>
+                <i class="fa fa-arrow-right"></i>
+                <code class="ww"><%= cf.success_path %></code>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <i class="fa fa-envelope"></i>
+          Proccessing Notification
+        </h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-condensed no-margins">
+          <tbody>
+            <% channel.success_contacts.each do |user| %>
+              <tr>
+                <td>
+                  <i class="fa fa-<%= if user.role? :user then 'user' else 'envelope' end %>"></i>
+                  <%= user.email %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <i class="fa fa-envelope"></i>
+          Error Notification
+        </h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-condensed no-margins">
+          <tbody>
+            <% channel.error_contacts.each do |user| %>
+              <tr>
+                <td>
+                  <i class="fa fa-<%= if user.role? :user then 'user' else 'envelope' end %>"></i>
+                  <%= user.email %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

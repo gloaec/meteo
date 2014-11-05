@@ -1,0 +1,94 @@
+<% content_for :title do %>
+  <i class="fa fa-th"></i> 
+  <%= @program.xml_file_name %>
+<% end %>
+<% content_for :subtitle, 'Overview' %>
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_url %>"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="<%= programs_url %>"><i class="fa fa-th"></i> Programs</a></li>
+        <li class="active"><i class="fa fa-calendar"></i> <span class="date" data-datetime="<%= @program.start_at.iso8601 %>"></span></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="#" onclick="$('#program_form').submit()" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @program %>">
+      <i class="fa fa-upload"></i>
+      <span class="hidden-xs"><%= t :submit %></span>
+    </a>
+    </div>
+  </div>
+<% end %>
+<%
+    program_class = 
+       if @program.dangers.any? then "danger"
+       elsif @program.warnings.any? then "warning"
+       else "success" end
+%>
+
+<%= form_for @program, html: { id: "program_form", class: "form" } do |f| %>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <ul class="nav nav-tabs">
+        <li class="active" class="danger">
+          <a href="#schedule" data-toggle="tab">
+            <i class="fa fa-clock-o"></i>
+            <span class="hidden-xs"><%= t :schedule %></span>
+          </a>
+        </li>
+        <li>
+          <a href="#errors" data-toggle="tab">
+            <% if @program.warnings.any? %>
+              <span class="label label-warning"><i class="fa fa-warning"></i> <%= @program.warnings.count %></span>
+            <% end %>
+            <% if @program.dangers.any? %>
+              <span class="label label-danger"><i class="fa fa-warning"></i> <%= @program.dangers.count %></span>
+            <% elsif !@program.new_record? %>
+              <span class="label label-success"><i class="fa fa-check"></i></span>
+            <% end %>
+          </a>
+        </li>
+      </ul>
+    </div>
+  
+    <div class="col-xs-4">
+      <div class="btn-group btn-group-justified form-inline" data-toggle="buttons">
+        <label class="btn btn-default <%= 'active' if @program.notify_success %>">
+          <%= f.check_box :notify_success %>
+          <span class="text-success">
+            <i class="fa fa-envelope"></i>
+            <span class="hidden-xs"><%= t :notify_success %></span>
+          </span>
+        </label>
+        <label class="btn btn-default <%= 'active' if @program.notify_error %>">
+          <%= f.check_box :notify_error %>
+          <span class="text-danger">
+            <i class="fa fa-envelope"></i>
+            <span class="hidden-xs"><%= t :error_notify %></span>
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="col-xs-2">
+      <div class="btn-group btn-group-justified form-inline" data-toggle="buttons">
+        <label class="btn btn-default active">
+          <input type="checkbox" value="1" checked="checked" name="autocorrect"/>
+          <i class="fa fa-check"></i>
+          <span class="hidden-xs"><%= t :autocorrect %></span>
+        </label>
+      </div>
+    </div>
+    <div class="tab-content col-xs-12">
+      <div class="tab-pane active top20" id="schedule">
+        <%= render 'programs/form', program: @program, f: f %>
+      </div>
+      <div class="tab-pane" id="errors">
+        <%= render 'programs/errors', program: @program %>
+      </div>
+    </div>
+  </div>
+
+
+<% end %>

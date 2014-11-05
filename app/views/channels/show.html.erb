@@ -1,0 +1,47 @@
+<% content_for :title do %>
+  <i class="fa fa-desktop"></i> 
+  <%= @channel.name %>
+<% end %>
+
+<% content_for :subtitle, t(:details) %>
+
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li class="active"><i class="fa fa-desktop"></i> Channels</li>
+        <li class="active"><i class="fa fa-eye"></i> <%= @channel.name %></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="<%= edit_channel_path @channel %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @channel %>">
+      <i class="fa fa-edit"></i>
+      <span class="hidden-xs"><%= t :edit %></span>
+    </a>
+    </div>
+  </div>
+<% end %>
+
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active">
+    <a href="#programs" data-toggle="tab">
+      <i class="fa fa-th"></i> <%= t :programs %>
+    </a>
+  </li>
+  <li>
+    <a href="#configuration" data-toggle="tab">
+      <i class="fa fa-cogs"></i> <%= t :configuration %>
+    </a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="programs">
+    <%= render 'programs/calendar', events_source: channel_events_path(@channel, format: :json), programs: @channel.programs %>
+  </div>
+  <div class="tab-pane" id="configuration">
+    <%= render 'channels/configuration', channel: @channel %>
+  </div>
+</div>
+

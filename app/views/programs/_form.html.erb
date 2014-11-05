@@ -1,0 +1,131 @@
+<table class="table table-condensed no-margins">
+  <thead>
+    <tr>
+      <th>Program</th>
+      <th>Start/End time</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% previous_event = Event.new %>
+    
+    <%= f.fields_for :events do |ff| %>
+    
+      <% event = ff.object %>
+      <% duration = Time.at(TimeDifference.between(event.start_at, event.end_at).in_seconds).utc %>
+      <% next_event = program.events.find_by_position(event.position+1) || Event.new %>
+      <% errors = event.duration_errors + event.other_errors %>
+      <% classname_a = errors.select {|e| e.classname == 'danger'}.any? ? 'danger' : errors.any? ? 'warning' : 'success' %>
+      <% classname_b = classname_a == 'danger' ? 'error' : classname_a %>
+
+      <tr class="<%= errors.any? ? "alert alert-#{classname_a}" : previous_event.name == event.name ? "default" : "info" %>">
+        <th>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
+            <%= ff.text_field :name, class: "form-control" %>
+          </div>
+          <% unless errors.empty? %>
+            <ul class="no-margins top5">
+              <% errors.each do |error| %>
+                <li>
+                  <i class="fa fa-warning"></i>
+                  <strong><%= error.msg %><strong>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </th>
+        <% tag = previous_event.name == event.name ? "td" : "th" %>
+        <<%= tag %>>
+          <fieldset class="form-group has-<%= classname_b %> no-margins" id="timepicker_<%= event.id %>_1">
+            <div class="input-group bootstrap-timepicker">
+              <span class="input-group-addon"><i class="fa fa-play text-success"></i></span>
+              <%= ff.text_field :start_at, class: "form-control timepicker", value: event.start_at.strftime("%H:%M:%S"), data: {time: event.start_at.strftime("%H:%M:%S"), target: "#timepicker_#{event.id}_1"} %>
+            </div>
+          </fieldset>
+        </<%= tag %>>
+        <td>
+          <fieldset class="form-group has-<%= classname_b %> no-margins" id="timepicker_<%= event.id %>_2" disabled>
+            <div class="input-group bootstrap-timepicker">
+              <span class="input-group-addon"><i class="fa fa-clock-o text-info"></i></span>
+              <%= text_field_tag :duration, duration.strftime("%H:%M:%S"), class: "form-control timepicker", data: {time: duration.strftime("%H:%M:%S"), target: "#timepicker_#{event.id}_2"}  %>
+            </div>
+          </fieldset>
+        </td>
+      </tr>
+
+      <% errors = event.gap_errors %>
+      <% classname_a = errors.where(classname: 'danger').any? ? 'danger' : errors.any? ? 'warning' : 'success' %>
+      <% classname_b = classname_a == 'danger' ? 'error' : classname_a %>
+      <% reverse = false %>
+
+      <% unless next_event.end_at.nil? %>
+        <% if event.end_at <= next_event.start_at %>
+          <% gap = Time.at(TimeDifference.between(event.end_at, next_event.start_at).in_seconds).utc %>
+        <% else %>
+          <% reverse = true %>
+          <% gap = Time.at(TimeDifference.between(next_event.start_at, event.end_at).in_seconds).utc %>
+        <% end %>
+      <% end %>
+
+      <tr class="<%= errors.any? ? "alert alert-#{classname_a}" : "text-muted" %>">
+        <td>
+          <% if errors.empty? %>
+            <i class="fa fa-arrows-v"></i>
+          <% else %>
+            <ul class="no-margins">
+              <% errors.each do |error| %>
+                <li>
+                  <i class="fa fa-warning"></i>
+                  <strong><%= error.msg %><strong>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </td>
+        <% tag = next_event.name != event.name ? "th" : "td" %>
+        <<%= tag %>>
+          <div class="form-group has-<%= classname_b %> no-margins" id="timepicker_<%= event.id %>_3">
+            <div class="input-group bootstrap-timepicker">
+              <span class="input-group-addon"><i class="fa fa-stop text-danger"></i></span>
+              <%= ff.text_field :end_at, value: event.end_at.strftime("%H:%M:%S"), class: "form-control timepicker", data: {time: event.end_at.strftime("%H:%M:%S"), target: "#timepicker_#{event.id}_3"}  %>
+            </div>
+          </div>
+        </<%= tag %>>
+        <td>
+          <% if gap %>
+            <fieldset class="form-group has-<%= classname_b %> no-margins" id="timepicker_<%= event.id %>_4" disabled>
+              <div class="input-group bootstrap-timepicker">
+                <span class="input-group-addon"><i class="fa fa-clock-o text-muted"></i></span>
+                <%= text_field_tag :gap, "#{'-' if reverse}#{gap.strftime("%H:%M:%S")}", class: "form-control timepicker", data: {time: "#{'-' if reverse}#{gap.strftime("%H:%M:%S")}", target: "#timepicker_#{event.id}_4"}  %>
+              </div>
+            </fieldset>
+          <% end %>
+        </td>
+      </tr>
+
+      <% previous_event = event %>
+
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  (function($){
+    $('.timepicker').each(function(){
+      $(this).timepicker({
+        hourStep: 1,
+        minuteStep: 1,
+        secondStep: 1,
+        showSeconds: true,
+        showMeridian: false,
+        disableFocus: false,
+        defaultTime: false,
+        appendWidgetTo: $(this).data('target')
+      });
+      if(/^\-/.test($(this).data('time'))){
+        $(this).val($(this).data('time'));
+      }
+    });   
+  }(jQuery));
+</script>

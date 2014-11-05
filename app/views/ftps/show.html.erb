@@ -1,0 +1,59 @@
+<% content_for :title do %>
+  <i class="fa fa-sitemap"></i>
+  <%= @ftp.host %>
+<% end %>
+
+<% content_for :subtitle do %>
+  <%= t :details %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li><a href="<%= ftps_path %>"><i class="fa fa-sitemap"></i> <%= t :ftp_servers %></a></li>
+        <li class="active"><i class="fa fa-eye"></i> <%= @ftp.host %></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="<%= edit_ftp_path(@ftp) %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @ftp %>">
+        <i class="fa fa-edit"></i>
+        <span class="hidden-xs"><%= t :edit %></span>
+      </a>
+    </div>
+  </div>
+<% end %>
+
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <th><%= t :host %></th>
+      <td><%= @ftp.host %></td>
+    </tr>
+    <tr>
+      <th><%= t :port %></th>
+      <td><%= @ftp.port %></td>
+    </tr>
+    <tr>
+      <th><%= t :user %></th>
+      <td><%= @ftp.user %></td>
+    </tr>
+    <tr>
+      <th><%= t :passive_mode %></th>
+      <td>
+        <% if @ftp.passive %>
+          <i class="fa fa-check"></i>
+          <span class="hidden-xs">
+            Enabled
+          </span>
+        <% else %>
+          <i class="fa fa-times"></i>
+          <span class="hidden-xs">
+            Disabled
+          </span>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>

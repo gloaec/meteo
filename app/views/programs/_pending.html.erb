@@ -1,0 +1,74 @@
+<% if programs.any? %>
+   
+  <table class="table table-striped">
+    <thead>
+      <th>File</th>
+      <th>Channel</th>
+      <th>Start date</th>
+      <th>Result</th>
+    </head>
+    <tbody>
+      <% programs.each do |program| %>
+        <tr>
+          <td>
+            <a href="<%= program_path(program) %>">
+              <i class="fa fa-file"></i>
+              <%= program.xml_file_name %>
+            </a>
+          </td>
+          <td>
+            <span class="label label-primary">      
+              <i class="fa fa-desktop"></i>
+              <%= program.channel.name %>
+            </span>
+          </td>
+          <td>
+            <% unless program.start_at.nil? %>
+              <span class="label label-info">      
+                <i class="fa fa-calendar"></i>
+                <%= program.start_at.strftime("%d/%m/%y") %>
+              </span>
+            <% end %>
+          </td>
+          <td>
+            <span data-toggle="collapse" data-target="#collapse_<%= program.id %>">
+            <% if program.warnings.any? %>
+              <span class="label label-warning"><i class="fa fa-warning"></i> <%= program.dangers.where(:classname => 'warning').count %></span>
+            <% end %>
+            <% if program.dangers.any? %>
+              <span class="label label-danger"><i class="fa fa-warning"></i> <%= program.dangers.where(:classname => 'danger').count %></span>
+            <% elsif !program.new_record?%>
+              <span class="label label-success"><i class="fa fa-check"></i></span>
+            <% end %>
+            </span>
+          </td>
+          <td class="text-right">
+            <% if can? :edit, program %>
+              <a href="<%= edit_program_path(program) %>" class="btn btn-primary btn-xs">
+                <i class="fa fa-edit"></i><span class="hidden-xs"> <%= t :edit %></span>
+              </a>
+            <% end %>
+            <% if can? :destroy, program %>
+              <%= link_to program, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' do %>
+                <i class="fa fa-trash-o"></i><span class="hidden-xs"> <%= t :delete %></span>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="hidden-row">
+            <div id="collapse_<%= program.id %>" class="accordian-body collapse">
+            <%= render 'programs/errors', program: program %>     
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  
+  <div class="jumbotron top20">
+    <p><%= t :no_pending_programs %></p>
+  </div>
+
+<% end %>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  queue_path: MyString
+  success_path: MyString
+  error_path: MyString
+
+two:
+  name: MyString
+  queue_path: MyString
+  success_path: MyString
+  error_path: MyString

@@ -1,0 +1,24 @@
+<div class="container">
+
+  <div class="page-header">
+    <h1>Error processing <small><%= @program.xml_file_name %></small></h1>
+  </div>
+
+  <p>
+    Click this link bellow for full view :
+    <a href="<%= program_url(@program, :only_path => false) %>"><%= program_url(@program, :only_path => false) %></a>
+  </p>
+
+  <%= render 'programs/errors', :program => @program %>
+ 
+  <div class="page-header">
+    <h2>Schedule</h2>
+    <h3><small>
+      from <%= @program.start_at.strftime("%d/%m/%Y %H:%M:%S") %>
+      to <%= @program.end_at.strftime("%d/%m/%Y %H:%M:%S") %>
+    </small></h3>
+  </div>
+
+  <%= render 'programs/schedule', :program => @program %>
+
+</div>

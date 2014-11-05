@@ -1,0 +1,58 @@
+<% content_for :title do %>
+  <i class="fa fa-th"></i> 
+  <%= @program.xml_file_name %>
+<% end %>
+<% content_for :subtitle, 'Overview' %>
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_url %>"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="<%= programs_url %>"><i class="fa fa-th"></i> Programs</a></li>
+        <li class="active"><i class="fa fa-calendar"></i> <span class="date" data-datetime="<%= @program.start_at.nil? ? "" : @program.start_at.iso8601 %>"></span><%= t(:unknown) if @program.start_at.nil? %></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="<%= edit_program_path @program %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @program %>">
+      <i class="fa fa-edit"></i>
+      <span class="hidden-xs"><%= t :edit %></span>
+    </a>
+    </div>
+  </div>
+<% end %>
+<%
+    program_class = 
+       if @program.dangers.any? then "danger"
+       elsif @program.warnings.any? then "warning"
+       else "success" end
+%>
+
+<ul class="nav nav-tabs">
+  <li class="active" class="danger">
+    <a href="#schedule" data-toggle="tab">
+      <i class="fa fa-clock-o"></i>
+      <span class="hidden-xs"><%= t :schedule %></span>
+    </a>
+  </li>
+  <li>
+    <a href="#errors" data-toggle="tab">
+      <% if @program.warnings.any? %>
+        <span class="label label-warning"><i class="fa fa-warning"></i> <%= @program.warnings.count %></span>
+      <% end %>
+      <% if @program.dangers.any? %>
+        <span class="label label-danger"><i class="fa fa-warning"></i> <%= @program.dangers.count %></span>
+      <% elsif !@program.new_record? %>
+        <span class="label label-success"><i class="fa fa-check"></i></span>
+      <% end %>
+    </a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="schedule">
+    <%= render 'programs/schedule', program: @program %>
+  </div>
+  <div class="tab-pane" id="errors">
+    <%= render 'programs/errors', program: @program %>
+  </div>
+</div>

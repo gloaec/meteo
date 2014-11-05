@@ -1,0 +1,250 @@
+
+<!-- TODO: Check for @channel.new_record? for ftp / contact forms -->
+
+<%= form_for(@channel, html: {class: "form-horizontal", id:"channel_form"}) do |f| %>
+  <% if @channel.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@channel.errors.count, "error") %> prohibited this @channel.from being saved:</h2>
+
+      <ul>
+      <% @channel.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :queue_path, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :queue_path, class: "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :error_path, class: "col-sm-3 control-label" %>
+    <div class="col-sm-9">
+      <%= f.text_field :error_path, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="fa fa-code"></i>
+            Validation configuration
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :min_duration_error, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :min_duration_error, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :min_duration_warning, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :min_duration_warning, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :min_gap_error, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :min_gap_error, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :min_gap_warning, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :min_gap_warning, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :max_duration_error, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :max_duration_error, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :max_duration_warning, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :max_duration_warning, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :max_gap_error, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :max_gap_error, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :max_gap_warning, class: "col-sm-6 control-label" %>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <%= f.text_field :max_gap_warning, class: "form-control" %>
+                  <span class="input-group-addon">sec</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+        
+  <% unless @channel.new_record? %>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left">
+              <i class="fa fa-upload"></i>
+              FTP Transfert
+            </h3>
+            <div class="pull-right">
+            <a href="#" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#ftp_modal">
+              <i class="fa fa-plus"></i>
+              <span class="hidden-xs"><%= t :add_ftp %></span>
+            </a>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped table-condensed no-margins">
+              <tbody>
+                <% @channel.channel_ftps.each do |cf| %>
+                  <% ftp = cf.ftp %>
+                  <tr>
+                    <td>
+                      <%= link_to channel_channel_ftp_path(@channel, cf), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs pull-right' do %>
+                        <i class="fa fa-trash-o"></i><span class="hidden-xs"> <%= t :delete %></span>
+                      <% end %>
+                      <i class="fa fa-sitemap"></i>
+                      <code class="ww"><%= ftp.user %></code>
+                      @
+                      <code class="ww"><%= ftp.host %></code>
+                      :
+                      <code class="ww"><%= ftp.port %></code>
+                      <i class="fa fa-arrow-right"></i>
+                      <code class="ww"><%= cf.success_path %></code>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+    
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left">
+              <i class="fa fa-envelope"></i>
+              Proccessing Notification
+            </h3>
+            <a href="#" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#success_contact_modal">
+              <i class="fa fa-plus"></i>
+              <span class="hidden-xs"><%= t :add_contact %></span>
+            </a>
+            <div class="clearfix"></div>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped table-condensed no-margins">
+              <tbody>
+                <% @channel.channel_success_contacts.each do |csc| %>
+                  <% user = csc.user %>
+                  <tr>
+                    <td>
+                      <%= link_to channel_channel_success_contact_path(@channel, csc), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs pull-right' do %>
+                        <i class="fa fa-trash-o"></i><span class="hidden-xs"> <%= t :delete %></span>
+                      <% end %>
+                      <i class="fa fa-<%= if user.role? :user then 'user' else 'envelope' end %>"></i>
+                      <%= user.email %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+    
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left">
+              <i class="fa fa-envelope"></i>
+              Error Notification
+            </h3>
+            <a href="#" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#error_contact_modal">
+              <i class="fa fa-plus"></i>
+              <span class="hidden-xs"><%= t :add_contact %></span>
+            </a>
+            <div class="clearfix"></div>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped table-condensed no-margins">
+              <tbody>
+                <% @channel.channel_error_contacts.each do |cec| %>
+                  <% user = cec.user %>
+                  <tr>
+                    <td>
+                      <%= link_to channel_channel_error_contact_path(@channel, cec), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs pull-right' do %>
+                        <i class="fa fa-trash-o"></i><span class="hidden-xs"> <%= t :delete %></span>
+                      <% end %>
+                      <i class="fa fa-<%= if user.role? :user then 'user' else 'envelope' end %>"></i>
+                      <%= user.email %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+<% end %>
+
+<% unless @channel.new_record? %>
+  <%= render 'channels/ftp_form' %>
+  <%= render 'channels/success_contact_form' %>
+  <%= render 'channels/error_contact_form' %>
+<% end %>
+

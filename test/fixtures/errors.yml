@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  msg: MyString
+  type: 
+  before_event_id: 
+  after_event_id: 
+
+two:
+  code: MyString
+  msg: MyString
+  type: 
+  before_event_id: 
+  after_event_id: 

@@ -1,0 +1,29 @@
+<% content_for :title do %>
+  <i class="fa fa-desktop"></i> 
+  <%= @channel.name %>
+<% end %>
+
+<% content_for :subtitle do %>
+   <i class="fa fa-edit"></i>
+   <%= t :edit %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li><a href="<%= channels_path %>"><i class="fa fa-desktop"></i> <%= t :channels %></a></li>
+        <li class="active"><i class="fa fa-edit"></i> <%= @channel.name %></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="#" onclick="$('#channel_form').submit()" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @channel %>">
+      <i class="fa fa-check"></i>
+      <span class="hidden-xs"><%= t :update %></span>
+    </a>
+    </div>
+    </div>
+<% end %>
+
+<%= render 'form' %>

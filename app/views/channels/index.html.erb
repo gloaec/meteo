@@ -1,0 +1,145 @@
+<% content_for :title do %>
+  <i class="fa fa-desktop"></i> 
+  Channels
+<% end %>
+<% content_for :subtitle, 'Overview' %>
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-md-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li class="active"><i class="fa fa-desktop"></i> Channels</li>
+      </ol>
+    </div>
+    <div class="col-md-2">
+      <a href="<%= new_channel_path %>" class="btn btn-success btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :create, Channel %>">
+        <i class="fa fa-plus"></i>
+        New Channel
+      </a>
+    </div>
+  </div>
+<% end %>
+
+<div class="row">
+    <% @channels.each do |channel|
+    
+      program = channel.programs.last || Program.new(
+        xml_file_name: "[No file]"
+      )
+        
+      program_class = 
+         if    program.new_record? then "default"
+         elsif program.dangers.any? then "danger"
+         else "success" end
+    %>
+      <div class="col-lg-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left">
+              <i class="fa fa-desktop"></i>
+              <%= channel.name %>
+            </h3>
+            <span class="btn-group pull-right">
+              <% if can? :read, channel %>
+                <a href="<%= channel_path(channel) %>" class="btn btn-primary btn-sm">
+                  <i class="fa fa-arrow-right"></i><span class="hidden-xs"> Show</i>
+                </a>
+              <% end %>
+              <% if can? :edit, channel %>
+                <a href="<%= edit_channel_path(channel) %>" class="btn btn-primary btn-sm">
+                  <i class="fa fa-edit"></i><span class="hidden-xs"> Edit</span>
+                </a>
+              <% end %>
+              <% if can? :destroy, channel %>
+                <%= link_to channel, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' do %>
+                  <i class="fa fa-trash-o"></i><span class="hidden-xs"> Delete</span>
+                <% end %>
+              <% end %>
+            </span>
+            <span class="clearfix"></span>
+          </div>
+          <div class="panel-body">
+            <% unless program.new_record? %>
+            <p>
+              Latest :
+              <a href="<%= program_path(program) %>"><i class="fa fa-file"></i> <%= program.xml_file_name %></a>
+              - <i class="fa fa-clock-o"></i> <span class="timeago" data-datetime="<%= program.created_at.iso8601 %>"></span>
+              <span class="clearfix"></span>
+            </p>
+            <% end %>
+
+            <div class="panel-group" id="accordion<%= channel.id %>">
+              
+              <div class="panel panel-<%= program_class %>">
+                <div class="panel-heading clearfix">
+                  <a data-toggle="collapse" data-parent="#accordion<%= channel.id %>" href="#collapse_xml<%= channel.id %>">
+                    <h3 class="panel-title pull-left">
+                      <i class="fa fa-code"></i>
+                      XML
+                    </h3>
+		    <span class="pull-right">
+                      <% if program.warnings.any? %>
+                        <span class="label label-warning"><i class="fa fa-warning"></i> <%= program.warnings.count %></span>
+	              <% end %>
+		      <% if program.dangers.any? %>
+                        <span class="label label-danger"><i class="fa fa-warning"></i> <%= program.dangers.count %></span>
+                      <% elsif !program.new_record? %>
+                        <span class="label label-success"><i class="fa fa-check"></i></span>
+                      <% end %>
+                    </span>
+                  </a>
+                </div>
+                <div id="collapse_xml<%= channel.id %>" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <%= render 'programs/errors', :program => program %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel panel-info">
+                <div class="panel-heading clearfix">
+                  <a data-toggle="collapse" data-parent="#accordion<%= channel.id %>" href="#collapse_program<%= channel.id %>">
+                    <h3 class="panel-title pull-left">
+                      <i class="fa fa-th"></i>
+                      Schedule
+                    </h3>
+                    <span class="pull-right">
+	              <% unless program.end_at.nil? %>
+                        <span class="label label-info"><i class="fa fa-calendar"></i> <span class="date" data-datetime="<%= program.end_at.iso8601 %>"></span></span>
+	              <% end %>
+                    </span>
+                  </a>
+                </div>
+                <div id="collapse_program<%= channel.id %>" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <%= render 'programs/schedule', :program => program %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                  <a data-toggle="collapse" data-parent="#accordion<%= channel.id %>" href="#collapse_config<%= channel.id %>">
+                    <h3 class="panel-title pull-left">
+                      <i class="fa fa-cogs"></i>
+                      Configuration
+                    </h3>
+                    <span class="pull-right">
+                      <span class="label label-default"><i class="fa fa-upload"></i> <%= channel.channel_ftps.count %></span>
+                      <span class="label label-success"><i class="fa fa-envelope"></i> <%= channel.success_contacts.count %></span>
+                      <span class="label label-danger"><i class="fa fa-envelope"></i> <%= channel.error_contacts.count %></span>
+                    </span>
+                  </a>
+                </div>
+                <div id="collapse_config<%= channel.id %>" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <%= render 'channels/configuration', channel: channel %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+</div>

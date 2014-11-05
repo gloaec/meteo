@@ -1,0 +1,31 @@
+##########################
+ERROR processing "<%= @program.xml_file_name %>"
+##########################
+
+Click this link bellow for full view : 
+
+<%= program_url(@program, :only_path => false) %>
+
+Errors (<%= @program.program_errors.count %>)
+=========================
+
+<%
+  err_id = 0
+  @program.program_errors.each do |error| err_id+=1 %>
+#<%= err_id %> <%= error.msg %>
+<% end %>
+
+Schedule from <%= @program.start_at.strftime("%d/%m/%Y %H:%M:%S") %> to <%= @program.end_at.strftime("%d/%m/%Y %H:%M:%S") %>
+==========================
+
+<% previous_event = Event.new
+   @program.events.each do |event|
+     duration = TimeDifference.between(event.start_at, event.end_at).in_general
+     next_event = @program.events.find_by_position(event.position+1) || Event.new
+     errors = event.duration_errors + event.other_errors 
+     duration_print = ""
+     duration_print += "#{duration[:hours]}h" unless duration[:hours].zero? 
+     duration_print += "#{duration[:minutes]}m" unless duration[:minutes].zero? and duration[:hours].zero? 
+     duration_print += "#{duration[:seconds]}s" %>
+<%= event.start_at.strftime("%H:%M:%S") %> - <%= event.name %> (<%= duration_print %>)
+<% end %>

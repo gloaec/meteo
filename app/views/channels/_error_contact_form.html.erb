@@ -1,0 +1,79 @@
+<% @channel_error_contact = @channel.channel_error_contacts.new %>
+
+<%= form_for [@channel, @channel_error_contact], html: { class: 'form-horizontal' } do |f| %>
+
+  <div class="modal fade" id="error_contact_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">
+            <i class="fa fa-sitemap"></i>
+            <%= t :add_error_contact %>
+          </h4>
+        </div>
+	<div class="modal-body">
+          <div class="form-group">
+            <%= f.label :user_id, t(:user), class: 'control-label col-sm-3' %>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-sitemap"></i></span>
+                <%= f.select :user_id, [["Create new contact", 0]] + @contacts.collect {|x| [x.email,x.id]}, {}, { class: "form-control" } %>
+              </div>
+            </div>
+          </div>
+          <%= f.fields_for :user, User.new(role: 'contact') do |ff| %>
+            <div class="form-group">
+              <%= ff.label :email, class: 'control-label col-sm-3' %>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                  <%= ff.email_field :email, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <%#= render partial: 'ftps/form', locals: { f: f } %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">
+            <i class="fa fa-plus"></i>
+            <%= t :add_contact %>
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<% end %>
+
+<script type="text/javascript">
+  (function($){
+
+    function form_error_contact(){
+      return {
+        id:    $('#channel_error_contact_user_id')   .val(), 
+        email: $('#channel_error_contact_user_attributes_email').val()
+      }
+    }
+
+    var error_contact_bkp = form_error_contact();
+    var contacts = <%= @contacts.to_json.html_safe %>;
+
+    $('#channel_error_contact_user_id').change(function(){
+      var id = $(this).val();
+      if(id == 0){
+        $('#channel_error_contact_user_attributes_email').prop('disabled', false).val(error_contact_bkp.email)
+      } else {
+        var error_contact= null;
+        error_contact_bkp = form_error_contact();
+        $.each(contacts, function(k,v){
+          if(v.id == id) error_contact = v
+        }); 
+        $('#channel_error_contact_user_attributes_email').prop('disabled', true).val(error_contact.email)
+      }
+    });
+
+  }(jQuery));
+</script>

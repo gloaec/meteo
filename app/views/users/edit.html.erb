@@ -1,0 +1,27 @@
+<% content_for :title do %>
+  <i class="fa fa-<%= if @user.role? :user then 'user' else 'envelope' end %>"></i>
+  <%= @user.email %>
+<% end %>
+<% content_for :subtitle do %>
+  <i class="fa fa-edit"></i>
+  <%= t :edit %>
+<% end %>
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-md-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li><a href="<%= users_path %>"><i class="fa fa-group"></i> <%= t :users %></a></li>
+        <li class="active"><i class="fa fa-edit"></i> <%= @user.email %></a></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="#" onclick="$('#user_form').submit()" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @user %>">
+      <i class="fa fa-check"></i>
+      <span class="hidden-xs"><%= t :update %></span>
+    </a>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'users/form' %>

@@ -1,0 +1,133 @@
+<%= form_for(ftp, html: { class: "form-horizontal", id: "ftp_form" }) do |f| %>
+
+  <% if ftp.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ftp.errors.count, "error") %> prohibited this ftp from being saved:</h2>
+
+      <ul>
+      <% ftp.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :user, class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+        <%= f.text_field :user, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :password, class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <%= f.password_field :password, class: 'form-control', placeholder: "password" %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :host, 'Host:Port', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <div class="input-group">
+          <span class="input-group-addon">@</span>
+          <%= f.text_field :host, class: 'form-control' %>
+          <span class="input-group-addon">:</span>
+          <%= f.number_field :port, class: 'form-control', size: 5 %>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :passive, class: 'control-label col-sm-3' do %><%= t :passive_mode %><% end %>
+    <div class="col-sm-6">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default btn-mode" value="1"><%= t :enabled %></button>
+        <button type="button" class="btn btn-default btn-mode" value="0"><%= t :disabled %></button>
+      </div>
+    </div>
+    <%= f.check_box :passive, class: 'hidden' %>
+    <div class="col-sm-3">
+    <button id="ping_ftp" data-loading-text="Loading..." type="button" class="btn btn-info btn-ping">
+      <i class="fa fa-signal"></i>
+      <%= t :ping_ftp %>
+    </button>
+  </div>
+
+<% end %>
+            
+<script type="text/javascript">
+  (function($){
+
+    $("#ping_ftp").on('click', function(e){
+      $('.btn-ping').button('loading');	    
+      e.preventDefault();
+      var $form = $("#ftp_form");
+      $.post("<%= ftps_ping_path(format: :json) %>", { 
+        action: "ping",
+        ftp: {
+          user: $form.find("input[name='ftp[user]']").val(),  
+	  password: $form.find("input[name='ftp[password]']").val(),  
+          host: $form.find("input[name='ftp[host]']").val(),  
+          port: $form.find("input[name='ftp[port]']").val()
+        }
+      }).done(function(data){
+        if(data.response){
+	  $('.btn-ping')
+	  .button('reset').empty()
+	  .removeClass('btn-info btn-danger')
+	  .addClass('btn-success')
+	  .append($('<i>').addClass('fa fa-link'))
+	  .append(' Working');
+	} else {
+	  $('.btn-ping')
+	  .button('reset').empty()
+	  .removeClass('btn-info btn-success')
+	  .addClass('btn-danger')
+	  .append($('<i>').addClass('fa fa-unlink'))
+	  .append(' Error');
+	}
+        setTimeout(function(){
+          $('.btn-ping')
+          .button('reset').empty()
+          .removeClass('btn-success btn-danger')
+          .addClass('btn-info')
+          .append($('<i>').addClass('fa fa-signal'))
+          .append(' Ping Ftp');
+        }, 3000);
+      }).error(function(){
+	  $('.btn-ping')
+	  .button('reset').empty()
+	  .removeClass('btn-info btn-success')
+	  .addClass('btn-danger')
+	  .append($('<i>').addClass('fa fa-unlink'))
+	  .append(' Error');
+        setTimeout(function(){
+          $('.btn-ping')
+          .button('reset').empty()
+          .removeClass('btn-success btn-danger')
+          .addClass('btn-info')
+          .append($('<i>').addClass('fa fa-signal'))
+          .append(' Ping Ftp');
+        }, 3000);
+      });
+    });
+
+    $('.btn-mode').each(function(){
+      if ($(this).val() == "1" && $('#ftp_passive').is(':checked') ||
+          $(this).val() == "0" && !$('#ftp_passive').is(':checked') ){
+        $(this).addClass('active');
+      }
+    })
+    .click(function(){
+      $('#ftp_passive').prop('checked', $(this).val() == "1");
+      $('.btn-mode').removeClass('active');
+      $(this).addClass('active');
+    });
+
+  }(jQuery));
+</script>

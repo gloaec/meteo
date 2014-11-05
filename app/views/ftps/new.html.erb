@@ -1,0 +1,27 @@
+<% content_for :title do %>
+  <i class="fa fa-plus"></i> 
+  <%= t :new_ftp %>
+<% end %>
+
+<% content_for :subtitle, nil %>
+
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li><a href="<%= ftps_path %>"><i class="fa fa-sitemap"></i> <%= t :ftp_servers %></a></li>
+        <li class="active"><i class="fa fa-plus"></i> <%= t :new_ftp %></li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="#" onclick="$('#ftp_form').submit()" class="btn btn-success btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :create, Ftp %>">
+      <i class="fa fa-check"></i>
+      <span class="hidden-xs"><%= t :save %></span>
+    </a>
+    </div>
+    </div>
+<% end %>
+
+
+<%= render 'form', ftp: @ftp %>

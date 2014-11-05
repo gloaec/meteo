@@ -1,0 +1,157 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require bootstrap
+ *= require bootstrap-timepicker
+ *= require font-awesome
+ *= require ./sb-admin
+ *= require_self
+ *= require_tree .
+ */
+
+@import "bootstrap/variables";
+
+.navbar-inverse .navbar-nav > .open > a, 
+.navbar-inverse .navbar-nav > .open > a:hover, 
+.navbar-inverse .navbar-nav > .open > a:focus {
+  background: inherit;
+  color: #999999;
+}
+
+.navbar-inverse .navbar-nav > .open > a:hover, 
+.navbar-inverse .navbar-nav > .open.active > a, 
+.navbar-inverse .navbar-nav > .open > a:focus {
+  background: #080808;
+  color: #FFFFFF;
+}
+.hidden-row {padding: 0 !important; }
+
+.label-0 { background-color: #632A17; }
+.label-1 { background-color: #BFA024; }
+.label-2 { background-color: #E62240; }
+.label-3 { background-color: #A00030; }
+.label-4 { background-color: #D17399; }
+
+.label-5 { background-color: #859731; }
+.label-6 { background-color: #A3AF9B; }
+.label-7 { background-color: #5D4157; }
+.label-8 { background-color: #A96471; }
+.label-9 { background-color: #AB8860; }
+
+.event .label { padding: 0 0.2em; }
+.event .label.event-important  { border: 2px solid #D43F3A; }
+.event .label.event-warning { border: 2px solid #EEA236; }
+.event .label.event-success { border: 2px solid #4CAE4C; }
+
+.btn-group > .btn, .btn-group {
+  overflow: hidden;
+}
+
+.panel-group .panel {
+  margin-bottom: 20px;
+}
+.panel-group > .panel {
+  border-radius: 4px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.modal-content > .alert {
+  margin: 0;
+  webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+}
+
+.visible {
+  display: block;
+}
+
+.dropdown-menu.navbar-nav > li {
+  float: none;
+}
+.side-nav > li.dropdown > ul.dropdown-menu > li.active > a {
+  color: #FFF;
+}
+
+.btn-breadcrumb {
+  margin-bottom: 20px;
+}
+
+.ww {
+  white-space: normal;
+}
+
+.no-margins {
+  margin: 0;
+  position: relative;
+}
+
+.top5 {
+  margin-top: 5px;
+}
+.top10 {
+  margin-top: 10px;
+}
+.top20 {
+  margin-top: 20px;
+}
+
+.panel-heading .label,
+.nav li a .label {
+  font-size: 10.5px;
+  vertical-align: middle;
+  margin-top: 10px;
+}
+
+
+.panel-heading .pull-right {
+ /* font-size: 16px;*/
+  line-height: 1.1;
+  vertical-align: middle;
+}
+
+.panel-heading a:not(.btn) {
+  color: inherit;
+}
+
+
+.navbar-brand {
+  height: 50px;
+  width: 225px;
+  padding-left: 45px;
+  padding-right: 15px;
+  display: block;
+  background: url(<%= asset_path "nrj_logo.png" %>) no-repeat scroll 10px center / 30px auto #272727;
+}
+
+
+span.hidden-sm { display: inline !important; }
+span.hidden-xs { display: inline !important; }
+
+@media (max-width: $screen-sm-max) {
+  span.hidden-sm {
+      display: none !important;
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  span.hidden-xs {
+      display: none !important;
+  }
+}
+
+tr.info > td,
+tr.info > th {
+  border-color: #BCE8F1 !important;
+  border-top: 5px solid #BCE8F1  !important;
+  background-color: #EEE !important;
+}
