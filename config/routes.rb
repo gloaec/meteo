@@ -1,4 +1,4 @@
-NrjEit::Application.routes.draw do
+NrjMeteo::Application.routes.draw do
   #get "programs/index"
   #get "programs/show"
   #get "users/index"
@@ -10,14 +10,11 @@ NrjEit::Application.routes.draw do
 
 
   devise_for :users
+  resources :rapports
 
-  resources :channels do
-    get "events"
-    resources :programs
-    resources :ftps
-    resources :channel_ftps, only: [:create, :destroy]
-    resources :channel_success_contacts, only: [:create, :destroy]
-    resources :channel_error_contacts, only: [:create, :destroy]
+
+  resource :rapports do
+    get :refresh
   end
 
   post "ftps/ping"
@@ -28,21 +25,16 @@ NrjEit::Application.routes.draw do
 
   resources :users
 
-  get "programs/events"
-
-  resources :programs do
-    get "events"#, on: :collection
-    post "transfer"
+  resources :previsions do
+    #post "transfer"
   end
 
-  resources :events, only: [:edit]
- 
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'programs#index'
+  root 'rapports#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

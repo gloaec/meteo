@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   #check_authorization
 
-  before_filter :set_channels
+  before_filter :set_rapports
   before_filter :default_url_options
   before_filter do # Cancan protected attributes workaround
     resource = controller_name.singularize.to_sym
@@ -21,9 +21,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_channels
+  def set_rapports
     @current_user = current_user || User.new
-    @channels = Channel.all.select {|_| can?(:read, _)}
+    @rapports = Rapport.all.select {|_| can?(:read, _)}
   end
 
   def current_ability

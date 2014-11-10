@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NrjEit</title>
+  <title>NrjMeteo</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
@@ -23,43 +23,50 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="<%= root_path %>">
+            <img src="<%= asset_path 'nrj_logo.png' %>" height="30" width="100" />
           </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
-            <% if can? :read, Program %>
-              <li class="<%= 'active' if params[:controller] =='programs' %>">
-                <a href="<%= programs_path %>"><i class="fa fa-th"></i> Programs</a>
-              </li>
-            <% end %>
             <li class="dropdown <%= 'active' if params[:controller] =='channels' and params[:action] == 'index' %> open">
-              <a href="<%= channels_url %>" class="dropdown-toggle">
-                <i class="fa fa-th-list"></i>
-                Channels
-                <span class="pull-right">
-                  <span class="badge"><%= @channels.size %></span>
-                  <b class="caret"></b>
-                </span>
+              <a href="<%= rapports_url %>" class="dropdown-toggle">
+                <i class="fa icon-cloudy1"></i>
+                Rapports Météo
               </a>
               <ul class="dropdown-menu navbar-nav">
-                <% unless @channels.empty? %>
-                  <% @channels.each do |channel| %>
-                    <li class="<%= 'active' if @channel and @channel == channel %>">
-                      <a href="<%= url_for channel %>">
-                        <i class="fa fa-desktop"></i>
-                        <%= channel.name %>
-                      </a>
-                    </li>
-                  <% end %> 
-                <% else %>
-                  <li>
-                    <a class="disabled">No channels available</a>
-                  </li>
-                <% end %>
+                <li class="<%= 'active' if false %>">
+                  <a href="">
+                    <i class="fa icon-france"></i>
+                    Météo France
+                  </a>
+                </li>
+                <li class="<%= 'active' if false %>">
+                  <a href="">
+                    <i class="fa icon-palm12"></i>
+                    Météo des Plages
+                  </a>
+                </li>
+                <li class="<%= 'active' if false %>">
+                  <a href="">
+                    <i class="fa icon-pine7"></i>
+                    Météo des Neiges
+                  </a>
+                </li>
+                <li class="<%= 'active' if false %>">
+                  <a href="">
+                    <i class="fa fa-globe"></i>
+                    Météo Monde
+                  </a>
+                </li>
               </ul>
             </li>
+            <% if can? :read, Rapport %>
+              <li class="<%= 'active' if params[:controller] =='programs' %>">
+              <a href="<%= rapports_path %>"><i class="fa fa-book"></i> Import Log</a>
+              </li>
+            <% end %>
             <% if can? :read, User %>
               <li class="<%= 'active' if params[:controller] =='users' %>">
                 <a href="<%= users_path %>"><i class="fa fa-group"></i> Users</a>
@@ -73,53 +80,6 @@
           </ul>
 
           <ul class="nav navbar-nav navbar-right navbar-user">
-            <!--li class="dropdown messages-dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li class="dropdown-header">7 New Messages</li>
-                <li class="message-preview">
-                  <a href="#">
-                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
-                    <span class="name">John Smith:</span>
-                    <span class="message">Hey there, I wanted to ask you something...</span>
-                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li class="message-preview">
-                  <a href="#">
-                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
-                    <span class="name">John Smith:</span>
-                    <span class="message">Hey there, I wanted to ask you something...</span>
-                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li class="message-preview">
-                  <a href="#">
-                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
-                    <span class="name">John Smith:</span>
-                    <span class="message">Hey there, I wanted to ask you something...</span>
-                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li><a href="#">View Inbox <span class="badge">7</span></a></li>
-              </ul>
-            </li>
-            <li class="dropdown alerts-dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
-                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
-                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
-                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
-                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
-                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
-                <li class="divider"></li>
-                <li><a href="#">View All</a></li>
-              </ul>
-            </li-->
             <li class="dropdown user-dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-user"></i>
@@ -127,14 +87,12 @@
               <b class="caret"></b>
             </a>
               <ul class="dropdown-menu">
-                <!--li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-                <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li-->
                 <li><a href="<%= user_path(@current_user) %>"><i class="fa fa-gear"></i> Settings</a></li>
                 <li class="divider"></li>
                 <li>
-                <%= link_to destroy_user_session_path, :method => :delete do %>
-                  <i class="fa fa-power-off"></i> Log Out</a></li>
-                <% end %>
+                  <%= link_to destroy_user_session_path, :method => :delete do %>
+                    <i class="fa fa-power-off"></i> Log Out</a></li>
+                  <% end %>
               </ul>
             </li>
           </ul>

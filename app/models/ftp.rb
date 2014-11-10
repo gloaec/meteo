@@ -32,6 +32,6 @@ class Ftp < ActiveRecord::Base
   protected
 
   def secret
-    Digest::SHA1.hexdigest(NrjEit::Application.config.secret_key_base)
+    Digest::SHA1.hexdigest(NrjMeteo::Application.config.secret_key_base)
   end
 end

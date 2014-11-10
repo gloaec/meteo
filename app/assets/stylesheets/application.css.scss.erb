@@ -14,6 +14,7 @@
  *= require ./sb-admin
  *= require_self
  *= require_tree .
+ *= require_tree ../../../vendor/assets/stylesheets
  */
 
 @import "bootstrap/variables";
@@ -127,10 +128,8 @@
 .navbar-brand {
   height: 50px;
   width: 225px;
-  padding-left: 45px;
-  padding-right: 15px;
+  padding: 10px 15px;
   display: block;
-  background: url(<%= asset_path "nrj_logo.png" %>) no-repeat scroll 10px center / 30px auto #272727;
 }
 
 
@@ -146,6 +145,9 @@ span.hidden-xs { display: inline !important; }
 @media (max-width: $screen-xs-max) {
   span.hidden-xs {
       display: none !important;
+  }
+  .navbar-brand {
+    width: 130px;
   }
 }
 

@@ -80,9 +80,6 @@
   <thead>
     <th>Email</th>
     <th>Role</th>
-    <% Channel.all.each do |channel| %>
-      <th><%= channel.name %></th>
-    <% end %>
     <td>&nbsp;</td>
   </thead>
   <tbody>
@@ -95,23 +92,6 @@
           </a>
         </td>
         <td><%= user.role %></td>
-        <% Channel.all.each do |channel| %>
-          <td>
-            <% if user.can? :edit, channel %>
-              <i class="fa fa-edit"></i>
-            <% elsif user.can? :read, channel %>
-              <i class="fa fa-eye"></i>
-            <% else %>
-              <i class="fa fa-times"></i>
-            <% end %>
-            <% if channel.success_contacts.include?(user) %>
-              <i class="fa fa-envelope text-success"></i>
-            <% end %>
-            <% if channel.error_contacts.include?(user) %>
-              <i class="fa fa-envelope text-danger"></i>
-            <% end %>
-          </td>
-        <% end %>
         <td class="text-right">
           <% if can? :edit, user %>
             <a href="<%= edit_user_path(user) %>" class="btn btn-primary btn-xs">

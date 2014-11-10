@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-NrjEit::Application.load_tasks
+NrjMeteo::Application.load_tasks
