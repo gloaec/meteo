@@ -8,22 +8,23 @@ NrjMeteo::Application.routes.draw do
   #get "users/update"
   #get "users/delete"
 
+  # You can have the root of your site routed with "root"
+  root 'rapports#index'
 
   devise_for :users
+  resources :users
   resources :rapports
 
-
   resource :rapports do
-    get :refresh
+    get 'refresh'
   end
 
   post "ftps/ping"
+  get "rapports/refresh"
 
   resources :ftps do
     post "ping"
   end
-
-  resources :users
 
   resources :previsions do
     #post "transfer"
@@ -32,9 +33,6 @@ NrjMeteo::Application.routes.draw do
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  root 'rapports#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

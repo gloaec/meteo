@@ -5,8 +5,11 @@ class RapportsController < ApplicationController
   #before_action :set_rapport, only: [:show, :edit, :update, :destroy, :events]
 
 
+  # GET /rapports/refresh
+  # GET /rapports/refresh.json
   def refresh
-
+    render json: {foo: "bar"}
+    render html: "coucou"
   end
 
   # GET /rapports
