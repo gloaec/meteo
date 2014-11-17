@@ -6,6 +6,8 @@ class CreateRapports < ActiveRecord::Migration
       t.string     :date_str
       t.string     :type
       t.text       :unites
+      t.string     :mtime
+      t.references :path
       t.timestamps
     end
   end

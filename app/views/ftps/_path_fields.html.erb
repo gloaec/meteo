@@ -1,0 +1,14 @@
+<div class="col-md-12 fields">
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="fa fa-folder"></i></span>
+      <%= f.text_field :path, class: 'form-control' %>
+      <span class="input-group-btn">
+        <% remove = capture do %>
+          <i class="fa fa-times"></i>
+        <% end %>
+        <%= link_to_remove_fields remove, f, class: 'btn btn-danger' %>
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+{
+  "fonts": [
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.ttf",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.woff",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.eot",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.svg"
+  ],
+  "templates": [
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom/fontcustom.css",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom/fontcustom-preview.html"
+  ],
+  "glyphs": [
+    "thermometer50",
+    "sea1",
+    "lightning",
+    "sun8",
+    "cloud46",
+    "snowflake3",
+    "barometer",
+    "foggy5",
+    "cloudy19",
+    "simple33",
+    "winds4",
+    "dark20",
+    "sunrise4",
+    "earth16",
+    "cloud310",
+    "cloudy1",
+    "palm12",
+    "snow41",
+    "pine7",
+    "electrical14",
+    "cold5",
+    "france",
+    "sun79",
+    "eiffel4",
+    "camera69",
+    "rain4",
+    "moon144",
+    "map105",
+    "clouds11",
+    "rainy12",
+    "lightning6",
+    "windy4"
+  ]
+}

@@ -13,14 +13,19 @@ NrjMeteo::Application.routes.draw do
 
   devise_for :users
   resources :users
-  resources :rapports
 
-  resource :rapports do
-    get 'refresh'
+  resources :rapports do
+    get 'refresh'  
+    get 'paris' , on: :collection
+    get 'france', on: :collection
+    get 'monde' , on: :collection
+    get 'plages', on: :collection
+    get 'neiges', on: :collection 
   end
 
+  resources :rapports
+
   post "ftps/ping"
-  get "rapports/refresh"
 
   resources :ftps do
     post "ping"

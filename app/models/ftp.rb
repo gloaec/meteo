@@ -1,8 +1,8 @@
 require 'net/ftp'
 
 class Ftp < ActiveRecord::Base
-  has_many :ftp_channels, class_name: 'ChannelFtp', dependent: :destroy
-  has_many :channels, through: :ftp_channels, source: :channel
+  has_many :paths
+  accepts_nested_attributes_for :paths, :reject_if => lambda { |a| a[:path].blank? }, :allow_destroy => true
  
   def ping?
     ftp = nil

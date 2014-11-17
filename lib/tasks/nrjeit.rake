@@ -1,4 +1,6 @@
 require 'nokogiri'
+require 'net/ftp'
+require 'timeout'
 
 namespace :db do
   desc "Database Re-Install"
@@ -9,6 +11,11 @@ namespace :db do
     Rake::Task['db:seed'].invoke
   end
 end 
+
+desc "Import new XMLs from FTP"
+task :import do
+
+end
 
 desc "Validate new XML files"
 

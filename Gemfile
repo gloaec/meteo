@@ -18,7 +18,7 @@ gem 'bootstrap-timepicker-rails',
   #git: 'https://github.com/gloaec/bootstrap-timepicker-rails.git',
   path: 'vendor/bootstrap-timepicker-rails',
   branch: 'bootstrap-3'
-gem 'font-awesome-rails', '~> 4.0.0'
+gem 'font-awesome-rails', '~> 4.2.0'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'guard'
@@ -29,6 +29,9 @@ gem 'paperclip'
 gem 'momentjs-rails'
 gem 'aescrypt'
 gem 'htmlentities'
+gem 'will_paginate'
+gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+gem 'jquery-ui-rails'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -38,6 +41,7 @@ end
 group :development do
   #gem 'capistrano'
   gem 'rvm-capistrano'
+  gem 'capistrano-local-precompile', require: false
 end
 
 # Use ActiveModel has_secure_password

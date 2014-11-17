@@ -17,6 +17,7 @@ class FtpsController < ApplicationController
   # GET /ftps/new
   def new
     @ftp = Ftp.new
+    @ftp.paths.build
   end
 
   # GET /ftps/1/edit
@@ -78,9 +79,9 @@ class FtpsController < ApplicationController
     def ftp_params
       if params[:ftp][:id] == "0" or params[:ftp][:id].nil?
         if params[:ftp][:password] == ""
-          params.require(:ftp).permit(:host, :user, :port, :passive)
+          params.require(:ftp).permit(:host, :user, :port, :passive, paths_attributes: [:path, :_destroy, :id])
         else
-          params.require(:ftp).permit(:host, :user, :password, :port, :passive)
+          params.require(:ftp).permit(:host, :user, :password, :port, :passive, paths_attributes: [:path, :_destroy, :id])
         end
       else
         params.require(:ftp).permit(:id)

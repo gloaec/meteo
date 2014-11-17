@@ -1,9 +1,9 @@
 {
   "fonts": [
-    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_ecb9a483866675da5f9538a8286d6a69.ttf",
-    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_ecb9a483866675da5f9538a8286d6a69.woff",
-    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_ecb9a483866675da5f9538a8286d6a69.eot",
-    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_ecb9a483866675da5f9538a8286d6a69.svg"
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.ttf",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.woff",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.eot",
+    "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom_a6161731ca5aab111810360fdaf06a0f.svg"
   ],
   "templates": [
     "/home/ghis/Workspace/nrj-meteo/vendor/assets/stylesheets/fontcustom/fontcustom.css",
@@ -33,6 +33,7 @@
     "cold5",
     "france",
     "sun79",
+    "eiffel4",
     "camera69",
     "rain4",
     "moon144",

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140201150444) do
+ActiveRecord::Schema.define(version: 20141113175439) do
 
   create_table "cartes", force: true do |t|
     t.integer  "domaine_id"
@@ -42,11 +42,20 @@ ActiveRecord::Schema.define(version: 20140201150444) do
     t.string   "host"
     t.integer  "port"
     t.string   "user",                             default: "", null: false
-    t.binary   "password_digest", limit: 10485760
+    t.binary   "password_digest", limit: 16777215
     t.boolean  "passive"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "paths", force: true do |t|
+    t.string   "path"
+    t.integer  "ftp_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "paths", ["ftp_id"], name: "index_paths_on_ftp_id", using: :btree
 
   create_table "previsions", force: true do |t|
     t.integer  "rapport_id"
@@ -65,6 +74,8 @@ ActiveRecord::Schema.define(version: 20140201150444) do
     t.string   "date_str"
     t.string   "type"
     t.text     "unites"
+    t.string   "mtime"
+    t.integer  "path_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -85,8 +96,8 @@ ActiveRecord::Schema.define(version: 20140201150444) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "villes", force: true do |t|
     t.integer  "carte_id"

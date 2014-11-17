@@ -55,5 +55,17 @@
         <% end %>
       </td>
     </tr>
+    <tr>
+      <th><%= t :remote_paths %></th>
+      <td>
+          <% @ftp.paths.each do |path| %>
+            <p>
+              <i class="fa fa-folder"></i>
+              <%= path.path %>
+            </p>
+        <% end %>
+        </ul>
+      </td>
+    </tr>
   </tbody>
 </table>

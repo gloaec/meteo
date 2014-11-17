@@ -16,10 +16,29 @@
 //= require turbolinks
 //= require bootstrap
 //= require bootstrap-timepicker
+//= require dataTables/jquery.dataTables
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require moment
 //= require_tree .
 
-(function($){
+jQuery.fn.outerHTML = function(s) {
+  return (s)
+  ? this.before(s).remove()
+  : jQuery("<p>").append(this.eq(0).clone()).html();
+}
+
+function remove_fields(link) {
+  $(link).parent().parent().find("input[type=hidden]").attr('value', true);
+  $(link).parents(".fields").hide();
+}
+
+function add_fields(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g")
+  $(content.replace(regexp, new_id)).insertBefore($(link));
+}
+
+(function(){
 
   "use strict";
 
@@ -41,5 +60,4 @@
     });
 
   });
-
 }(jQuery));
