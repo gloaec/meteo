@@ -30,143 +30,14 @@
 <% end %>
 
 <% if @rapport.ephemerides.any? %>
-  <div class="panel panel-info">
+  <div class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title"><i class="fa icon-sunrise4"></i> Éphémérides</h3>
     </div>
     <div class="panel-body">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><i class="fa fa-calendar"></i> Échéance</th>
-            <th><i class="fa icon-sun79"></i> Lever</th>
-            <th><i class="fa icon-camera69"></i> Coucher</th>
-            <th><i class="fa fa-area-chart"></i> Variation</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @rapport.ephemerides.each do |ephemeride| %>
-            <tr>
-              <th><%= ephemeride.echeance.downcase.capitalize %></th>
-              <td><%= ephemeride.lever %></td>
-              <td><%= ephemeride.coucher %></td>
-              <td><%= ephemeride.variation %>min</td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%= render 'ephemeride', rapport: @rapport %>
     </div>
   </div>
 <% end %>
 
-<% if @rapport.previsions.any? %>
-  <% @rapport.previsions.each do |prevision| d = 0 %>
-    <% prevision.domaines.each do |domaine| d+=1 %>
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <% icon = case domaine.zone || domaine.nom.downcase
-               when 'paris'  then 'icon-eiffel4'
-               when 'france' then 'icon-france'
-               when 'monde'  then 'fa-globe'
-               when 'atlantique', 'corse', 'manche', 'mediterranee' then 'icon-sea1'
-               else ''
-               end
-            %>
-            <i class="fa <%= icon %>"></i>
-             <% if domaine.zone %>
-               <%= domaine.zone.capitalize %>
-             <% end %>
-             <% if domaine.nom %>
-               <%= domaine.nom.capitalize %>
-             <% end %>
-          </h3>
-        </div>
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-3">
-              <ul class="nav nav-pills nav-stacked" role="tablist">
-                <% c = 0 %>
-                <% domaine.cartes.each do |carte| c+=1 %>
-                  <li role="presentation" class="<%= 'active' if c == 1 %>">
-                    <a href="#d<%=d%>c<%=c%>" aria-controls="d<%=d%>c<%=c%>" role="tab" data-toggle="tab">
-                      <i class="fa fa-calendar"></i>
-                      <%= carte.echeance.downcase.capitalize %>
-                    </a>
-                  <li>
-                <% end %>
-              </ul>
-            </div>
-            <div class="col-md-9">
-              <div class="tab-content">
-                <% c = 0 %>
-                <% domaine.cartes.each do |carte| c+=1 %>
-                  <div role="tabpanel" class="tab-pane fade <%= 'in active' if c == 1 %>" id="d<%=d%>c<%=c%>">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th><i class="fa fa-crosshairs"></i> Ville</th>
-                          <th><i class="fa icon-thermometer50"></i> Température</th>
-                          <th><i class="fa fa-sun-o"></i> UV</th>
-                          <th><i class="fa fa-flag"></i> Temps sensible</th>
-                          <th><i class="fa icon-winds4"></i> Vent</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% carte.villes.each do |ville| %>
-                          <tr>
-                            <th><i class="fa fa-location-arrow"></i> <%= ville.nom %></th>
-                            <td>
-                              <% if ville.temperature %>
-                                <i class="fa icon-thermometer50"></i><%= ville.temperature %>°C
-                              <% elsif ville.temperature_min or ville.temperature_max %>
-                                <i class="fa icon-cold5"></i><%= ville.temperature_min || '-'  %>°C
-                                <i class="fa icon-barometer"></i><%= ville.temperature_max || '-' %>°C
-                              <% end %>
-                            </td>
-                            <td><%= ville.uv %></td>
-                            <td><%= ville.temps_sensible %></td>
-                            <td>
-                              <% if ville.vent_vitesse %>
-                                <i class="fa fa-dashboard"></i> <%= ville.vent_vitesse || '-' %>km/h
-                              <% end %>
-                              <% if ville.vent_direction %>
-                                <i class="fa fa-compass"></i> <%= ville.vent_direction.upcase || '-' %>
-                              <% end %>
-                            </td>
-                          </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
-<% end %>
-<!--ul class="nav nav-tabs" id="myTab">
-  <li class="active">
-    <a href="#programs" data-toggle="tab">
-      <i class="fa fa-th"></i> <%= t :programs %>
-    </a>
-  </li>
-  <li>
-    <a href="#configuration" data-toggle="tab">
-      <i class="fa fa-cogs"></i> <%= t :configuration %>
-    </a>
-  </li>
-</ul>
-
-<div class="tab-content">
-  <div class="tab-pane active" id="programs">
-    <%#= render 'programs/calendar', events_source: rapport_events_path(@rapport, format: :json), programs: @rapport.programs %>
-  </div>
-  <div class="tab-pane" id="configuration">
-    <%#= render 'rapports/configuration', rapport: @rapport %>
-  </div>
-</div-->
-
+<%= render 'previsions', rapport: @rapport %>

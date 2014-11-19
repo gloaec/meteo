@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20141113175439) do
     t.datetime "xml_updated_at"
     t.date     "date"
     t.string   "date_str"
-    t.string   "type"
+    t.string   "rapport_type"
     t.text     "unites"
     t.string   "mtime"
     t.integer  "path_id"

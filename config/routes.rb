@@ -16,11 +16,12 @@ NrjMeteo::Application.routes.draw do
 
   resources :rapports do
     get 'refresh'  
-    get 'paris' , on: :collection
-    get 'france', on: :collection
-    get 'monde' , on: :collection
-    get 'plages', on: :collection
-    get 'neiges', on: :collection 
+    get 'ephemerides' , on: :collection
+    get 'paris'       , on: :collection
+    get 'france'      , on: :collection
+    get 'monde'       , on: :collection
+    get 'plages'      , on: :collection
+    get 'neiges'      , on: :collection 
   end
 
   resources :rapports

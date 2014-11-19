@@ -4,7 +4,7 @@ class CreateRapports < ActiveRecord::Migration
       t.attachment :xml
       t.date       :date
       t.string     :date_str
-      t.string     :type
+      t.string     :rapport_type
       t.text       :unites
       t.string     :mtime
       t.references :path

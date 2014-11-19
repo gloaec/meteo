@@ -1,0 +1,31 @@
+<% if @rapport.previsions.any? %>
+  <% @rapport.previsions.each do |prevision| d = 0 %>
+    <% prevision.domaines.each do |domaine| d+=1 %>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <% icon = case domaine.zone || domaine.nom.downcase
+               when 'paris'  then 'icon-eiffel4'
+               when 'france' then 'icon-france'
+               when 'monde'  then 'fa-globe'
+               when 'atlantique', 'corse', 'manche', 'mediterranee' then 'icon-sea1'
+               else ''
+               end
+            %>
+            <i class="fa <%= icon %>"></i>
+             <% if domaine.zone %>
+               <%= domaine.zone.capitalize %>
+             <% end %>
+             <% if domaine.nom %>
+               <%= domaine.nom.capitalize %>
+             <% end %>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <%= render 'plages', domaine: domaine, d: d %>
+          <%= render 'cartes', domaine: domaine, d: d %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

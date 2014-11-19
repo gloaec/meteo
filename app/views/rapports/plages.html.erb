@@ -1,0 +1,36 @@
+<% content_for :title do %>
+  <i class="fa icon-palm12"></i> 
+  Météo des Plages
+<% end %>
+
+<% content_for :subtitle, @rapport.try(:date_str) || @rapport.previsions.first.try('echeance') || '' %>
+
+<% content_for :breadcrumbs do %>
+  <div class="row">
+    <div class="col-xs-10">
+      <ol class="breadcrumb">
+        <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+        <li><a href="<%= rapports_path %>"><i class="fa icon-cloudy1"></i> Rapports Météo</a></li>
+        <li class="active"><i class="fa icon-palm12"></i> Météo des Plages</li>
+      </ol>
+    </div>
+    <div class="col-xs-2">
+      <a href="<%= edit_rapport_path @rapport unless @rapport.nil? %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless not @rapport.nil? and can?(:edit, @rapport)   %>">
+      <i class="fa fa-edit"></i>
+      <span class="hidden-xs"><%= t :edit %></span>
+    </a>
+    </div>
+  </div>
+<% end %>
+
+<% if @rapport.nil? %>
+    <div class="alert alert-danger">Aucun fichier importé pour l'instant</div>
+<% else %>
+  <% if @rapport.unites %>
+    <div class="alert alert-info">
+      <%= @rapport.unites %>
+    </div>
+  <% end %>
+  
+  <%= render 'previsions', rapport: @rapport %>
+<% end %>

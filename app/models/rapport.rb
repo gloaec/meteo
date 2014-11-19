@@ -3,8 +3,7 @@ class Rapport < ActiveRecord::Base
   has_many :previsions, dependent: :destroy
   has_many :ephemerides, dependent: :destroy
   belongs_to :path
-
-  before_save :import
+  before_create :import
   #before_post_process :import
 
   def rapport_path
@@ -36,6 +35,8 @@ class Rapport < ActiveRecord::Base
         self.date = doc.css("date-fab").first.try(:content).try(:to_time)
         self.date_str = doc.css("date-fab-long").first.try(:content)
         self.unites = doc.css("unites").first.try(:content)
+        self.rapport_type = nil
+        self.rapport_type = :standard if doc.css("ephemeride").any? or doc.css("previsions").any?
 
         # EPHEMERIDES
         self.ephemerides.destroy_all
@@ -82,6 +83,7 @@ class Rapport < ActiveRecord::Base
                 vent_direction: zone_node.css('DD').first.try(:content),
                 etat_mer: zone_node.css('etatmer').first.try(:content)
               )
+              self.rapport_type = :plages unless zone_node.css('Tmer').first.nil?
             end
 
             # CARTES
@@ -90,10 +92,7 @@ class Rapport < ActiveRecord::Base
               carte = domaine.cartes.build(
                 echeance: carte_node['echeance']
               )
-              p "========================================================="
-              p carte_node['echeance']
-              p "========================================================="
-              
+
               # VILLES
               villes = carte_node.css('ville')
               villes.each do |ville_node|

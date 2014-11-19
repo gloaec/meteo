@@ -4,22 +4,28 @@ class RapportsController < ApplicationController
   #skip_authorize_resource :only => :events
   #before_action :set_rapport, only: [:show, :edit, :update, :destroy, :events]
 
+  def ephemerides
+    @rapport = Rapport.where(rapport_type: :standard).last
+  end
 
   def paris
-    @rapport = Rapport.last
-    render :show
+    @rapport = Rapport.where(rapport_type: :standard).last
   end
 
   def france
-  end
-
-  def plages
-  end
-
-  def neiges
+    @rapport = Rapport.where(rapport_type: :standard).last
   end
 
   def monde
+    @rapport = Rapport.where(rapport_type: :standard).last
+  end
+
+  def plages
+    @rapport = Rapport.where(rapport_type: :plages).last
+  end
+
+  def neiges
+    @rapport = Rapport.where(rapport_type: :neiges).last
   end
 
   # GET /rapports/refresh

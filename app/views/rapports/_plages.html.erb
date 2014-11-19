@@ -1,0 +1,45 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><i class="fa fa-crosshairs"></i> Ville</th>
+      <th><i class="fa icon-thermometer50"></i> Température</th>
+      <th><i class="fa icon-sea1"></i> Mer</th>
+      <th><i class="fa fa-sun-o"></i> UV</th>
+      <th><i class="fa fa-flag"></i> Temps sensible</th>
+      <th><i class="fa icon-winds4"></i> Vent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% domaine.zones.each do |zone| %>
+      <tr>
+        <th><i class="fa fa-location-arrow"></i> <%= zone.nom.mb_chars.downcase.capitalize %></th>
+        <td>
+          <% if zone.temperature %>
+            <i class="fa icon-thermometer50"></i><%= zone.temperature %>°C
+          <% elsif zone.temperature_min or zone.temperature_max %>
+            <i class="fa icon-cold5"></i><%= zone.temperature_min || '-'  %>°C
+            <i class="fa icon-barometer"></i><%= zone.temperature_max || '-' %>°C
+          <% end %>
+        </td>
+        <td>
+          <% if zone.etat_mer %>
+            <%= zone.etat_mer %>
+          <% end %>
+          <% if zone.temperature_mer %>
+            <i class="fa icon-thermometer50"></i><%= zone.temperature_mer %>°C
+          <% end %>
+        </td>
+        <td><%= zone.uv %></td>
+        <td><%= zone.temps_sensible %></td>
+        <td>
+          <% if zone.vent_vitesse %>
+            <i class="fa fa-dashboard"></i> <%= zone.vent_vitesse || '-' %>km/h
+          <% end %>
+          <% if zone.vent_direction %>
+            <i class="fa fa-compass"></i> <%= zone.vent_direction.upcase || '-' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

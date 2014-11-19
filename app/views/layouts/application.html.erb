@@ -30,47 +30,50 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
-            <li class="dropdown <%= 'active' if params[:controller] =='channels' and params[:action] == 'index' %> open">
-              <a href="<%= rapports_url %>" class="dropdown-toggle">
-                <i class="fa icon-cloudy1"></i>
-                Rapports Météo
-              </a>
-              <ul class="dropdown-menu navbar-nav">
-                <li class="<%= 'active' if false %>">
-                  <a href="<%= paris_rapports_path %>">
-                    <i class="fa icon-eiffel4"></i>
-                    Météo Paris
-                  </a>
-                </li>
-                <li class="<%= 'active' if false %>">
-                  <a href="<%= france_rapports_path %>">
-                    <i class="fa icon-france"></i>
-                    Météo France
-                  </a>
-                </li>
-                <li class="<%= 'active' if false %>">
-                  <a href="<%= plages_rapports_path %>">
-                    <i class="fa icon-palm12"></i>
-                    Météo des Plages
-                  </a>
-                </li>
-                <li class="<%= 'active' if false %>">
-                  <a href="<%= neiges_rapports_path %>">
-                    <i class="fa icon-pine7"></i>
-                    Météo des Neiges
-                  </a>
-                </li>
-                <li class="<%= 'active' if false %>">
-                  <a href="<%= monde_rapports_path %>">
-                    <i class="fa fa-globe"></i>
-                    Météo Monde
-                  </a>
-                </li>
-              </ul>
-            </li>
             <% if can? :read, Rapport %>
-              <li class="<%= 'active' if params[:controller] =='programs' %>">
-              <a href="<%= rapports_path %>"><i class="fa fa-book"></i> Import Log</a>
+              <li class="dropdown <%= 'active' if params[:controller] =='channels' and params[:action] == 'index' %> open">
+                <a href="<%= rapports_url %>" class="dropdown-toggle">
+                  <i class="fa icon-cloudy1"></i>
+                  Rapports Météo
+                </a>
+                <ul class="dropdown-menu navbar-nav">
+                  <li class="<%= 'active' if false %>">
+                    <a href="<%= ephemerides_rapports_path %>">
+                      <i class="fa icon-sunrise4"></i>
+                      Éphémérides
+                    </a>
+                  </li>
+                  <li class="<%= 'active' if false %>">
+                    <a href="<%= paris_rapports_path %>">
+                      <i class="fa icon-eiffel4"></i>
+                      Météo Paris
+                    </a>
+                  </li>
+                  <li class="<%= 'active' if false %>">
+                    <a href="<%= france_rapports_path %>">
+                      <i class="fa icon-france"></i>
+                      Météo France
+                    </a>
+                  </li>
+                  <li class="<%= 'active' if false %>">
+                    <a href="<%= monde_rapports_path %>">
+                      <i class="fa fa-globe"></i>
+                      Météo Monde
+                    </a>
+                  </li>
+                  <li class="<%= 'active' if false %>">
+                    <a href="<%= plages_rapports_path %>">
+                      <i class="fa icon-palm12"></i>
+                      Météo des Plages
+                    </a>
+                  </li>
+                  <li class="<%= 'active' if false %>">
+                    <a href="<%= neiges_rapports_path %>">
+                      <i class="fa icon-pine7"></i>
+                      Météo des Neiges
+                    </a>
+                  </li>
+                </ul>
               </li>
             <% end %>
             <% if can? :read, User %>

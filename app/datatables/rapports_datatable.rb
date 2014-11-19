@@ -22,7 +22,7 @@ private
       updated_at = "<span class='timeago' data-sort='#{rapport.updated_at}' data-datetime='#{rapport.updated_at}'></span>"
       [
         rapport.xml_file_name, #link_to(display_name, rapport),
-        rapport.type, # 'icon-france'
+        rapport.rapport_type, # 'icon-france'
         rapport.updated_at,
         rapport.id
       ]
@@ -37,7 +37,7 @@ private
     rapports = Rapport.order("#{sort_column} #{sort_direction}")
     rapports = rapports.page(page).per_page(per_page)
     if params[:sSearch].present?
-      rapports = rapports.where("xml_file_name like :search or type like :search", search: "%#{params[:sSearch]}%")
+      rapports = rapports.where("xml_file_name like :search or rapport_type like :search", search: "%#{params[:sSearch]}%")
     end
     rapports
   end
@@ -51,7 +51,7 @@ private
   end
 
   def sort_column
-    columns = %w[xml_file_name type updated_at]
+    columns = %w[xml_file_name rapport_type updated_at]
     columns[params[:iSortCol_0].to_i]
   end
 
