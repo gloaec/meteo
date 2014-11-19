@@ -23,6 +23,11 @@
   </div>
 <% end %>
 
+<% if @rapport.rapport_type.nil? %>
+  <div class="alert alert-danger">
+    Ce fichier n'a pas pu être classé.
+  </div>
+<% end %>
 <% if @rapport.unites %>
   <div class="alert alert-info">
     <%= @rapport.unites %>
