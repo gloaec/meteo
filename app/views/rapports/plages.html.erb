@@ -3,7 +3,7 @@
   Météo des Plages
 <% end %>
 
-<% content_for :subtitle, @rapport.try(:date_str) || @rapport.previsions.first.try('echeance') || '' %>
+<% content_for :subtitle, @rapport.try(:date_str) || @rapport.try(:previsions).try(:first).try('echeance') || '' %>
 
 <% content_for :breadcrumbs do %>
   <div class="row">
