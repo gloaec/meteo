@@ -47,72 +47,10 @@
       <div class="col-sm-9">
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-shield"></i></span>
-          <%= f.select :role, options_for_select(['contact', 'user', 'superadmin'], f.object.role), {}, class: 'form-control' %>
+          <%= f.select :role, options_for_select(['superadmin'], f.object.role), {}, class: 'form-control', disabled: true %>
         </div>
       </div>
     </div>
-  <% end %>
-
-  <% i = 0 %>
-
-  <%= f.fields_for :user_channels, f.object.user_channels.select{|uc| can? :read, uc.channel } do |ff| %>
-
-    <%= ff.hidden_field :channel_id %>
-
-    <div class="form-group">
-      <label class="control-label col-sm-3">
-        <i class="fa fa-desktop"></i>
-        <%= ff.object.channel.name %>
-      </label>
-
-      <div class="col-sm-9">
-        <% if can? :manage, User %>
-          <% role = nil %>
-          <fieldset class="btn-group form-inline role_fieldset" data-toggle="buttons">
-            <label class="btn btn-default <%= 'active' if ff.object.role == 'admin' %>">
-              <%= ff.radio_button :role, 'admin' %>
-              <i class="fa fa-edit"></i>
-              <span class="hidden-xs"><%= t :admin %></span>
-            </label>
-            <label class="btn btn-default <%= 'active' if ff.object.role == 'user' %>">
-              <%= ff.radio_button :role, 'user' %>
-              <i class="fa fa-eye"></i>
-              <span class="hidden-xs"><%= t :user %></span>
-            </label>
-            <label class="btn btn-default <%= 'active' if ff.object.role == 'contact' %>">
-              <%= ff.radio_button :role, 'contact' %>
-              <i class="fa fa-times"></i>
-              <span class="hidden-xs"><%= t :deny %></span>
-            </label>
-          </fieldset>
-        <% end %>
-
-        <% success = @user.success_channels.include?(ff.object.channel) %>
-        <% error = @user.error_channels.include?(ff.object.channel) %>
-
-        <div class="btn-group form-inline" data-toggle="buttons">
-          <label class="btn btn-default <%= 'active' if success %>">
-            <input type="checkbox" name="user[user_channels_attributes][<%= i %>][success]" value="1"
-            <%= 'checked="checked"' if success %>>
-            <span class="text-success">
-              <i class="fa fa-envelope"></i>
-              <span class="hidden-xs"><%= t :success_notify %></span>
-            </span>
-          </label>
-          <label class="btn btn-default <%= 'active' if error %>">
-            <input type="checkbox" name="user[user_channels_attributes][<%= i %>][error]" value="1"
-            <%= 'checked="checked"' if error %>>
-            <span class="text-danger">
-              <i class="fa fa-envelope"></i>
-              <span class="hidden-xs"><%= t :error_notify %></span>
-            </span>
-          </label>
-        </div>
-
-      </div>
-
-    </div>
-    <% i+=1 %>
   <% end %>
 
 <% end %>

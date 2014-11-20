@@ -15,7 +15,7 @@
       </ol>
     </div>
     <div class="col-xs-2">
-      <a href="<%= edit_rapport_path @rapport %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @rapport %>">
+      <a href="<%= edit_rapport_path @rapport %>" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless not @rapport.rapport_type.nil? and can? :edit, @rapport %>">
       <i class="fa fa-edit"></i>
       <span class="hidden-xs"><%= t :edit %></span>
     </a>

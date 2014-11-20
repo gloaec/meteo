@@ -20,63 +20,7 @@
   </div>
 <% end %>
 
-  <!--legend>Legend</legend>
-  <dl class="dl-horizontal">
-    <dt><i class="fa fa-user"></i></dt>
-    <dd><%= t :user_allowed_to_log_in %></dd>
-    <dt><i class="fa fa-envelope"></i></dt>
-    <dd><%= t :user_not_allowed_to_log_in %></dd>
-    <dt><i class="fa fa-envelope text-success"></i></dt>
-    <dd><%= t :user_suscribed_to_success_notification_on_channel %></dd>
-    <dt><i class="fa fa-envelope text-danger"></i></dt>
-    <dd><%= t :user_suscribed_to_error_notification_on_channel %></dd>
-    <dt><i class="fa fa-edit"></i></dt>
-    <dd><%= t :user_allowed_to_manage_channel %></dd>
-    <dt><i class="fa fa-eye"></i></dt>
-    <dd><%= t :user_allowed_to_consult_channel %></dd>
-    <dt><i class="fa fa-times"></i></dt>
-    <dd><%= t :user_not_allowed_to_consult_channel %></dd>
-  </dl-->
-
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          <%= t :legend %>
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse">
-      <div class="panel-body">
-        <span class="col-md-6">
-          <i class="fa fa-user"></i> <%= t :user_allowed_to_log_in %>
-        </span>
-        <span class="col-md-6">
-          <i class="fa fa-envelope"></i> <%= t :user_not_allowed_to_log_in %>
-        </span>
-        <span class="col-md-6">
-          <i class="fa fa-envelope text-success"></i> <%= t :user_suscribed_to_success_notification_on_channel %>
-        </span>
-        <span class="col-md-6">
-          <i class="fa fa-envelope text-danger"></i> <%= t :user_suscribed_to_error_notification_on_channel %>
-        </span>
-        <span class="col-md-6">
-          <i class="fa fa-edit"></i> <%= t :user_allowed_to_manage_channel %>
-        </span>
-        <span class="col-md-6">
-          <i class="fa fa-eye"></i> <%= t :user_allowed_to_consult_channel %>
-        </span>
-        <span class="col-md-6">
-          <i class="fa fa-times"></i> <%= t :user_not_allowed_to_consult_channel %>
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<table class="table table-condensed table-striped top20">
+<table class="table table-condensed table-striped">
   <thead>
     <th>Email</th>
     <th>Role</th>

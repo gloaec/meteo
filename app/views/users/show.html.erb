@@ -32,52 +32,6 @@ else 'envelope' end %>"></i> <%= @user.email %></a></li>
       <th><i class="fa fa-shield"></i> <%= t :role %></th>
       <td><%= @user.role %></td>
     </tr>
-    <% @user.user_channels.select{ |uc| can? :read, uc.channel }.each do |uc| %>
-    <tr>
-      <th>
-        <i class="fa fa-desktop"></i>
-        <%= uc.channel.name %>
-      </th>
-
-      <td>
-        <% if can? :manage, User %>
-          <% role = nil %>
-          <fieldset class="btn-group form-inline role_fieldset" data-toggle="buttons" disabled>
-            <label class="btn btn-default <%= 'btn-primary' if uc.role == 'admin' %>">
-              <i class="fa fa-edit"></i>
-              <span class="hidden-xs"><%= t :admin %></span>
-            </label>
-            <label class="btn btn-default <%= 'btn-primary' if uc.role == 'user' %>">
-              <i class="fa fa-eye"></i>
-              <span class="hidden-xs"><%= t :user %></span>
-            </label>
-            <label class="btn btn-default <%= 'btn-primary' if uc.role == 'contact' %>">
-              <i class="fa fa-times"></i>
-              <span class="hidden-xs"><%= t :deny %></span>
-            </label>
-          </fieldset>
-        <% end %>
-
-        <% success = @user.success_channels.include?(uc.channel) %>
-        <% error = @user.error_channels.include?(uc.channel) %>
-
-        <fieldset class="btn-group form-inline" data-toggle="buttons" disabled>
-          <label class="btn btn-default <%= 'btn-success' if success %>">
-            <span class="<%= 'text-success' unless success %>">
-              <i class="fa fa-envelope"></i>
-              <span class="hidden-xs"><%= t :success_notify %></span>
-            </span>
-          </label>
-          <label class="btn btn-default <%= 'btn-danger' if error %>">
-            <span class="<%= 'text-danger' unless error %>">
-              <i class="fa fa-envelope"></i>
-              <span class="hidden-xs"><%= t :error_notify %></span>
-            </span>
-          </label>
-        </fieldset>
-      </td>
-    </tr>
-    <% end %>
   </tbody>
 </table>
 

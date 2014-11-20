@@ -10,7 +10,7 @@
   <tbody>
     <% rapport.ephemerides.each do |ephemeride| %>
       <tr>
-        <th><%= ephemeride.echeance.downcase.capitalize %></th>
+        <th><%= ephemeride.echeance.try(:downcase).try(:capitalize) %></th>
         <td><%= ephemeride.lever %></td>
         <td><%= ephemeride.coucher %></td>
         <td><%= ephemeride.variation %>min</td>

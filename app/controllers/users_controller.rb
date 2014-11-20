@@ -22,26 +22,28 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
-    Channel.select{ |_| can? :read, _ }.each do |channel|
-      @user.user_channels.build channel: channel, role: "contact"
-    end
+    @user.role = 'superadmin'
+    #Channel.select{ |_| can? :read, _ }.each do |channel|
+    #  @user.user_channels.build channel: channel, role: "contact"
+    #end
   end
 
   # GET /users/1/edit
   def edit
     role = "admin" if @user.role? 'superadmin'
-    Channel.select{ |_| can? :read, _ }.each do |channel|
-      unless @user.user_channels.where(channel: channel).any?
-        @user.user_channels.build channel: channel, role: role
-      end
-    end
+    #Channel.select{ |_| can? :read, _ }.each do |channel|
+    #  unless @user.user_channels.where(channel: channel).any?
+    #    @user.user_channels.build channel: channel, role: role
+    #  end
+    #end
   end
 
   # POST /users
   # POST /users.json
   def create
     @user = User.new(user_params)
-    build_contact_channels
+    @user.role = 'superadmin'
+    #build_contact_channels
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }

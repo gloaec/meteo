@@ -1,11 +1,13 @@
 <% content_for :title do %>
-  <i class="fa fa-desktop"></i> 
-  <%= @channel.name %>
+  <i class="fa fa-code"></i> 
+  <%= @rapport.xml_file_name %>
 <% end %>
 
 <% content_for :subtitle do %>
-   <i class="fa fa-edit"></i>
-   <%= t :edit %>
+  <%= @rapport.date_str %>
+  |
+  <i class="fa fa-edit"></i>
+  Edit
 <% end %>
 
 <% content_for :breadcrumbs do %>
@@ -13,17 +15,53 @@
     <div class="col-xs-10">
       <ol class="breadcrumb">
         <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
-        <li><a href="<%= channels_path %>"><i class="fa fa-desktop"></i> <%= t :channels %></a></li>
-        <li class="active"><i class="fa fa-edit"></i> <%= @channel.name %></li>
+        <li><a href="<%= rapports_path %>"><i class="fa icon-cloudy1"></i> Rapports Météo</a></li>
+        <li class="active"><i class="fa fa-code"></i> <%= @rapport.xml_file_name %></li>
       </ol>
     </div>
     <div class="col-xs-2">
-      <a href="#" onclick="$('#channel_form').submit()" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @channel %>">
+      <a href="#" onclick="$('#rapport_form').submit()" class="btn btn-primary btn-breadcrumb col-md-12 pull-right <%= "disabled" unless can? :edit, @rapport %>">
       <i class="fa fa-check"></i>
       <span class="hidden-xs"><%= t :update %></span>
-    </a>
+      </a>
     </div>
-    </div>
+  </div>
 <% end %>
 
-<%= render 'form' %>
+<%= form_for(@rapport, html: {class: "form", id: "rapport_form"}) do |f| %>
+
+  <% if @rapport.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@rapport.errors.count, "error") %> prohibited this @rapport from being saved:</h2>
+      <ul>
+      <% @rapport.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @rapport.rapport_type.nil? %>
+    <div class="alert alert-danger">
+      Ce fichier n'a pas pu être classé.
+    </div>
+  <% end %>
+
+  <div class="form-group info">
+    <%= f.text_area :unites, class: "form-control", rows: 4 %>
+  </div>
+
+<% if @rapport.ephemerides.any? %>
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h3 class="panel-title"><i class="fa icon-sunrise4"></i> Éphémérides</h3>
+    </div>
+    <div class="panel-body">
+      <%= render 'ephemeride_form', rapport: @rapport %>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'previsions', rapport: @rapport %>
+
+<% end %>

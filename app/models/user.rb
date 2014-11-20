@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  attr_accessible :email, :role, :password, :password_confirmation, :remember_me
+
   #has_and_belongs_to_many :channels
 
   #has_many :user_channels, class_name: 'ChannelUser', foreign_key: :user_id, dependent: :destroy
