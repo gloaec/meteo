@@ -1,0 +1,72 @@
+<% content_for :title do %>
+  <i class="fa fa-book"></i> 
+  Journal d'activité
+<% end %>
+<% content_for :subtitle, "" %>
+<% content_for :breadcrumbs do %>
+  <ol class="breadcrumb">
+    <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+    <li class="active"><i class="fa fa-book"></i> Journal d'activité</li>
+  </ol>
+<% end %>
+
+<table id="import_logs" class="table" data-source="<%= import_logs_url(format: "json") %>">
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th>Heure</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+(function($){
+  $('#import_logs').dataTable({
+    sPaginationType: "full_numbers",
+    bJQueryUI: true,
+    bProcessing: true,
+    bServerSide: true,
+    sAjaxSource: $('#import_logs').data('source'),
+    order: [[ 1, "desc" ]],
+    fnDrawCallback: function(settings){
+      $(document).trigger('page:change');
+    },
+    fnRowCallback: function( $row, row, i ) {
+      $($row).addClass(row[0]); // row[0] => danger/success/...
+    },
+    aoColumns: [
+      null,
+      null
+    ],
+    aoColumnDefs: [
+      {
+        mRender: function (data, type, row) {
+          var icon = 'info-circle';
+          switch(row[0]){
+          case 'warning':
+          case 'danger':
+            icon = 'warning'; break;
+          case 'success':
+            icon = 'check'; break;
+          }
+          return $('<div>')
+            .append($('<i>').addClass('fa fa-'+icon))
+            .append(' ')
+            .append(row[1])
+            .html();
+        },
+        aTargets: [0]
+      },
+      { 
+        mRender: function (data, type, row) {
+          var datetime = new Date(row[2]);
+          return moment(datetime).fromNow();
+        },
+        aTargets: [1]
+      }
+    ]
+  });
+})(jQuery);
+</script>

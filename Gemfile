@@ -32,6 +32,8 @@ gem 'htmlentities'
 gem 'will_paginate'
 gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
 gem 'jquery-ui-rails'
+gem 'whenever', :require => false
+gem 'protected_attributes'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -42,6 +44,7 @@ group :development do
   #gem 'capistrano'
   gem 'rvm-capistrano'
   gem 'capistrano-local-precompile', require: false
+  gem 'debugger'
 end
 
 # Use ActiveModel has_secure_password

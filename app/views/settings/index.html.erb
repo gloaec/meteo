@@ -1,0 +1,26 @@
+<% content_for :title do %>
+  <i class="fa fa-wrench"></i> 
+  Paramètres
+<% end %>
+<% content_for :subtitle, "" %>
+<% content_for :breadcrumbs do %>
+  <ol class="breadcrumb">
+    <li><a href="<%= root_path %>"><i class="fa fa-home"></i> <%= t :home %></a></li>
+    <li class="active"><i class="fa fa-wrench"></i> Paramètres</li>
+  </ol>
+<% end %>
+
+<form action="<%= save_settings_path %>" method="POST" class="form form-horizontal">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+  <% for @setting in @settings %>
+    <%= fields_for "setting[]" do |f| %>
+      <div class="form-group">
+        <label for="settting_<%= @setting.id %>" class="col-sm-4 control-label"><%= @setting.var %></label>
+        <div class="col-sm-8">
+          <%= f.text_field :value, class: 'form-control', id: "settting_#{@setting.id}" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <%= submit_tag "Save", class: 'btn btn-primary pull-right' %>
+</form>

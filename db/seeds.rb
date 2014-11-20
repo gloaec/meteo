@@ -52,6 +52,11 @@ me = User.create!({
   password_confirmation: "user12345"
 })
 
+# Settings
+
+Setting.for('Timeout FTP (sec)').set=(10)
+Setting.for('Intervalle de rafraîchissement FTP (min)').set=(15)
+
 # Channels
 
 #channel1 = Channel.create({

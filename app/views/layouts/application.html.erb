@@ -31,43 +31,43 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
             <% if can? :read, Rapport %>
-              <li class="dropdown <%= 'active' if params[:controller] =='channels' and params[:action] == 'index' %> open">
+              <li class="dropdown <%= 'active' if params[:controller] =='rapports' and ['index','show','edit'].include?(params[:action]) %> open">
                 <a href="<%= rapports_url %>" class="dropdown-toggle">
                   <i class="fa icon-cloudy1"></i>
                   Rapports Météo
                 </a>
                 <ul class="dropdown-menu navbar-nav">
-                  <li class="<%= 'active' if false %>">
+                  <li class="<%= 'active' if params[:controller] =='rapports' and params[:action] == 'ephemerides' %>">
                     <a href="<%= ephemerides_rapports_path %>">
                       <i class="fa icon-sunrise4"></i>
                       Éphémérides
                     </a>
                   </li>
-                  <li class="<%= 'active' if false %>">
+                  <li class="<%= 'active' if params[:controller] =='rapports' and params[:action] == 'paris' %>">
                     <a href="<%= paris_rapports_path %>">
                       <i class="fa icon-eiffel4"></i>
                       Météo Paris
                     </a>
                   </li>
-                  <li class="<%= 'active' if false %>">
+                  <li class="<%= 'active' if params[:controller] =='rapports' and params[:action] == 'france' %>">
                     <a href="<%= france_rapports_path %>">
                       <i class="fa icon-france"></i>
                       Météo France
                     </a>
                   </li>
-                  <li class="<%= 'active' if false %>">
+                  <li class="<%= 'active' if params[:controller] =='rapports' and params[:action] == 'monde' %>">
                     <a href="<%= monde_rapports_path %>">
                       <i class="fa fa-globe"></i>
                       Météo Monde
                     </a>
                   </li>
-                  <li class="<%= 'active' if false %>">
+                  <li class="<%= 'active' if params[:controller] =='rapports' and params[:action] == 'plages' %>">
                     <a href="<%= plages_rapports_path %>">
                       <i class="fa icon-palm12"></i>
                       Météo des Plages
                     </a>
                   </li>
-                  <li class="<%= 'active' if false %>">
+                  <li class="<%= 'active' if params[:controller] =='rapports' and params[:action] == 'neiges' %>">
                     <a href="<%= neiges_rapports_path %>">
                       <i class="fa icon-pine7"></i>
                       Météo des Neiges
@@ -76,14 +76,32 @@
                 </ul>
               </li>
             <% end %>
-            <% if can? :read, User %>
-              <li class="<%= 'active' if params[:controller] =='users' %>">
-                <a href="<%= users_path %>"><i class="fa fa-group"></i> Users</a>
-              </li>
-            <% end %>
-            <% if can? :read, Ftp %>
-              <li class="<%= 'active' if params[:controller] =='ftps' %>">
-                <a href="<%= ftps_path %>"><i class="fa fa-sitemap"></i> FTP Servers</a>
+            <li class="dropdown <%= 'active' if params[:controller] =='channels' and params[:action] == 'index' %> open">
+              <a href="<%= settings_path %>" class="dropdown-toggle">
+                <i class="fa fa-cogs"></i>
+                Administration
+              </a>
+              <ul class="dropdown-menu navbar-nav">
+              <% if can? :read, Setting %>
+                <li class="<%= 'active' if params[:controller] =='settings' %>">
+                  <a href="<%= settings_path %>"><i class="fa fa-wrench"></i> Paramètres</a>
+                </li>
+              <% end %>
+              <% if can? :read, User %>
+                <li class="<%= 'active' if params[:controller] =='users' %>">
+                  <a href="<%= users_path %>"><i class="fa fa-group"></i> Utilisateurs</a>
+                </li>
+              <% end %>
+              <% if can? :read, Ftp %>
+                <li class="<%= 'active' if params[:controller] =='ftps' %>">
+                  <a href="<%= ftps_path %>"><i class="fa fa-sitemap"></i> Serveurs FTP</a>
+                </li>
+              <% end %>
+              </ul>
+            </li>
+            <% if can? :read, ImportLog %>
+              <li class="<%= 'active' if params[:controller] == 'import_logs' %>">
+                <a href="<%= import_logs_path %>"><i class="fa fa-book"></i> Journal d'activité</a>
               </li>
             <% end %>
           </ul>

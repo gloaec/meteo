@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141113175439) do
+ActiveRecord::Schema.define(version: 20141119194301) do
 
   create_table "cartes", force: true do |t|
     t.integer  "domaine_id"
@@ -48,6 +48,13 @@ ActiveRecord::Schema.define(version: 20141113175439) do
     t.datetime "updated_at"
   end
 
+  create_table "import_logs", force: true do |t|
+    t.string   "msg"
+    t.string   "msg_class"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "paths", force: true do |t|
     t.string   "path"
     t.integer  "ftp_id"
@@ -76,6 +83,13 @@ ActiveRecord::Schema.define(version: 20141113175439) do
     t.text     "unites"
     t.string   "mtime"
     t.integer  "path_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "settings", force: true do |t|
+    t.string   "var"
+    t.string   "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

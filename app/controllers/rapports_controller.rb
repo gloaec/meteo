@@ -32,66 +32,12 @@ class RapportsController < ApplicationController
   # GET /rapports/refresh.json
   def refresh
     flash[:warning] ||= []
-    flash[:info] ||= []
     flash[:notice] ||= []
-    updated  = []
-    created  = []
 
-    Ftp.all.each do |f|
-      ftp = nil
-      begin
-        Timeout::timeout(10) do
-          ftp = Net::FTP.new
-          ftp.passive = f.passive || false
-          ftp.connect(f.host, f.port) 
-          ftp.login f.user, f.password
-          f.paths.each do |path|
-            begin
-              files = ftp.chdir(path.path)
-              files = ftp.nlst '*.xml'
-              files.each do |filename|
-                mtime = ftp.mtime(filename)
-                rapport = path.rapports.find_by xml_file_name: filename
-                if rapport
-                  if mtime == rapport.mtime
-                  else
-                    extname  = File.extname(filename)
-                    basename = File.basename(filename, extname)
-                    tempfile = Tempfile.new([basename, extname])
-                    ftp.getbinaryfile(filename, tempfile.path)
-                    rapport.xml = tempfile
-                    rapport.mtime = mtime
-                    rapport.xml_file_name = filename
-                    rapport.save
-                    updated << rapport
-                  end
-                else
-                  extname  = File.extname(filename)
-                  basename = File.basename(filename, extname)
-                  tempfile = Tempfile.new([basename, extname])
-                  ftp.getbinaryfile(filename, tempfile.path)
-                  rapport = path.rapports.create xml: tempfile, mtime: mtime, xml_file_name: filename
-                  created << rapport
-                end
-              end
-            #rescue
-              #results[f.id] = "#{f.user}@#{f.host}:#{path}"
-            #  flash[:warning] << "Can't read #{f.user}@#{f.host}:#{path.path}"
-            end
-          end
-          ftp.quit
-          #p "   => OK"
-        end
-      #rescue #Timeout::Error
-      #  flash[:warning] << "Can't connect to #{f.user}@#{f.host}"
-      ensure
-        begin
-          ftp.close unless ftp.nil?
-        rescue Net::FTPConnectionError
-          flash[:warning] << "Can't connect to #{f.user}@#{f.host}"
-        end
-        f.save
-      end
+    created, updated, errors = Rapport.fetch
+
+    errors.each do |error|
+      flash[:warning] << error
     end
 
     msg = "<strong>Actualisation Terminée</strong><br />"

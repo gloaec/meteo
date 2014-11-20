@@ -13,26 +13,56 @@
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require font-awesome
  *= require ./sb-admin
- *= require_self
  *= require_tree .
  *= require_tree ../../../vendor/assets/stylesheets
+ *= require_self
  */
 
 @import "bootstrap/variables";
 
-.navbar-inverse .navbar-nav > .open > a, 
-.navbar-inverse .navbar-nav > .open > a:hover, 
-.navbar-inverse .navbar-nav > .open > a:focus {
-  background: inherit;
+.side-nav>li.dropdown>ul.dropdown-menu>li>a {
   color: #999999;
+  padding: 7px 15px 7px 40px;
+  border: none;
 }
 
-.navbar-inverse .navbar-nav > .open > a:hover, 
-.navbar-inverse .navbar-nav > .open.active > a, 
-.navbar-inverse .navbar-nav > .open > a:focus {
+.navbar-inverse .navbar-nav > li > ul > li {
+  border-top: 1px solid #303030;
+}
+
+
+.navbar-inverse .navbar-nav > .open > a,
+.side-nav > li.dropdown > a,
+.side-nav > li > a {
+    background: none repeat scroll 0 0 #101010;
+    color: #d9d9d9;
+}
+.navbar-inverse .navbar-nav > .open.active > a {
+  color: white;
+}
+
+.side-nav > li > a:hover,
+.side-nav > li > a:focus {
   background: #080808;
   color: #FFFFFF;
+  border-left: 5px solid #d64635;
 }
+
+.side-nav > li > ul.dropdown-menu > li > a:hover, 
+.side-nav > li > ul.dropdown-menu > li > a:focus {
+  border-left: 5px solid #d64635;
+}
+
+.side-nav > li.active > a,
+.side-nav > li.dropdown > ul.dropdown-menu > li.active > a,
+.navbar-inverse .navbar-nav > .open.active > a {
+  border-left: 5px solid #428bca;
+}
+
+.side-nav > li.dropdown > ul.dropdown-menu > li.active > a {
+  background: none repeat scroll 0 0 #474747 !important;
+}
+
 .hidden-row {padding: 0 !important; }
 
 .label-0 { background-color: #632A17; }

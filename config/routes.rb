@@ -13,6 +13,7 @@ NrjMeteo::Application.routes.draw do
 
   devise_for :users
   resources :users
+  resources :import_logs
 
   resources :rapports do
     get 'refresh'  
@@ -23,8 +24,11 @@ NrjMeteo::Application.routes.draw do
     get 'plages'      , on: :collection
     get 'neiges'      , on: :collection 
   end
-
   resources :rapports
+
+  resources :settings do
+    post 'save' , on: :collection
+  end
 
   post "ftps/ping"
 

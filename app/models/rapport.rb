@@ -3,8 +3,8 @@ class Rapport < ActiveRecord::Base
   has_many :previsions, dependent: :destroy
   has_many :ephemerides, dependent: :destroy
   belongs_to :path
-  before_create :import
-  #before_post_process :import
+  #before_create :import
+  before_post_process :import
 
   def rapport_path
     if Rails.env == "production"
@@ -15,13 +15,14 @@ class Rapport < ActiveRecord::Base
   end
 
   def import
+    path = self.xml.queued_for_write[:original].try(:path)
+    path ||= self.xml.path
+
     begin
-      path = self.xml.queued_for_write[:original].try(:path)
-      path ||= self.xml.path
       f = File.open(path, 'r:iso-8859-1')
       doc = Nokogiri::XML(f, nil, 'iso-8859-1')
-    #rescue Exception => e
-      #p "Exception #{e}"                 
+    rescue Exception => e
+      ImportLog.create msg_class: 'danger', msg: "Can't read xml file \"#{path}\" : #{e.message}"
     end
 
     begin
@@ -111,11 +112,89 @@ class Rapport < ActiveRecord::Base
           end
         end
       end
-    #rescue Exception => e
-    #  p "Exception #{e}"                 
+    rescue Exception => e
+      ImportLog.create msg_class: 'warning', msg: "Prolem while reading xml file \"#{path}\" : #{e.message}"
     ensure
       #self.save!
     end 
+  end
+
+  def self.fetch
+    created  = []
+    updated  = []
+    errors   = []
+
+    Ftp.all.each do |f|
+      ftp = nil
+      begin
+        Timeout::timeout(Setting.for('Timeout FTP (sec)').value.to_i || 10) do
+          ftp = Net::FTP.new
+          ftp.passive = f.passive || false
+          ftp.connect(f.host, f.port) 
+          ftp.login f.user, f.password
+          f.paths.each do |path|
+            begin
+              files = ftp.chdir(path.path)
+              files = ftp.nlst '*.xml'
+              files.each do |filename|
+                mtime = ftp.mtime(filename)
+                rapport = path.rapports.find_by xml_file_name: filename
+                if rapport
+                  if mtime == rapport.mtime
+                  else
+                    extname  = File.extname(filename)
+                    basename = File.basename(filename, extname)
+                    tempfile = Tempfile.new([basename, extname])
+                    ftp.getbinaryfile(filename, tempfile.path)
+                    rapport.xml = tempfile
+                    rapport.mtime = mtime
+                    rapport.xml_file_name = filename
+                    rapport.save
+                    updated << rapport
+                  end
+                else
+                  extname  = File.extname(filename)
+                  basename = File.basename(filename, extname)
+                  tempfile = Tempfile.new([basename, extname])
+                  ftp.getbinaryfile(filename, tempfile.path)
+                  rapport = path.rapports.create xml: tempfile, mtime: mtime, xml_file_name: filename
+                  created << rapport
+                end
+              end
+            rescue Exception => e
+              msg = "Can't read #{f.user}@#{f.host}:#{path.path} : #{e.message}"
+              errors << msg
+              ImportLog.create msg_class: 'danger', msg: msg
+            end
+          end
+          ftp.quit
+        end
+      rescue Exception => e #Timeout::Error
+        msg = "Can't connect to #{f.user}@#{f.host} : #{e.message}"
+        errors << msg
+        ImportLog.create msg_class: 'danger', msg: msg
+      ensure
+        begin
+          ftp.close unless ftp.nil?
+        rescue Net::FTPConnectionError
+        end
+        f.save
+      end
+    end
+   
+    if (created.any? or updated.any?) and errors.any?
+      c = 'warning'
+    elsif (created.any? or updated.any?) and errors.empty?
+      c = 'success'
+    elsif errors.any?
+      c = 'danger'
+    else
+      c = 'default'
+    end
+
+    ImportLog.create msg_class: c, msg: "Actualisation terminée: #{created.size} nouveau(x) - #{updated.size} mis à jour - #{errors.size} erreurs"
+
+    return created, updated, errors
   end
 
 end
