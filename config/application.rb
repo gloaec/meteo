@@ -20,5 +20,6 @@ module NrjMeteo
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.assets.paths << File.join(Rails.root, 'app', 'assets', 'templates')
+    config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
   end
 end

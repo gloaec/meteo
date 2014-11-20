@@ -6,6 +6,8 @@ class Rapport < ActiveRecord::Base
   #before_create :import
   before_post_process :import
 
+  attr_accessible :xml_file_name, :date, :date_str, :rapport_type, :unites, :mtime
+
   def rapport_path
     if Rails.env == "production"
       File.expand_path(File.join(Rails.root, '..', '..', 'shared', 'rapports', self.id.to_s))
