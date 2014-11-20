@@ -3,6 +3,7 @@ require 'net/ftp'
 class Ftp < ActiveRecord::Base
   has_many :paths
   accepts_nested_attributes_for :paths, :reject_if => lambda { |a| a[:path].blank? }, :allow_destroy => true
+  attr_accessible :host, :user, :port, :passive, :paths_attributes
  
   def ping?
     ftp = nil

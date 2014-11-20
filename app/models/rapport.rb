@@ -182,14 +182,12 @@ class Rapport < ActiveRecord::Base
       end
     end
    
-    if (created.any? or updated.any?) and errors.any?
-      c = 'warning'
-    elsif (created.any? or updated.any?) and errors.empty?
+    if (created.any? or updated.any?) and errors.empty?
       c = 'success'
     elsif errors.any?
-      c = 'danger'
+      c = 'warning'
     else
-      c = 'default'
+      c = 'info'
     end
 
     ImportLog.create msg_class: c, msg: "Actualisation terminée: #{created.size} nouveau(x) - #{updated.size} mis à jour - #{errors.size} erreurs"
