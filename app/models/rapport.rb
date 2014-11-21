@@ -6,7 +6,8 @@ class Rapport < ActiveRecord::Base
   #before_create :import
   before_post_process :import
 
-  attr_accessible :xml_file_name, :date, :date_str, :rapport_type, :unites, :mtime
+  attr_accessible :xml, :xml_file_name, :xml_content_type, :xml_file_size, :xml_updated_at,
+      :date, :date_str, :rapport_type, :unites, :mtime
 
   def rapport_path
     if Rails.env == "production"
