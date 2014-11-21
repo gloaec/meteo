@@ -1,0 +1,93 @@
+/*
+  Icon Font: fontcustom
+*/
+
+@font-face {
+  font-family: "fontcustom";
+  src: url("fontcustom_a6161731ca5aab111810360fdaf06a0f.eot");
+  src: url("fontcustom_a6161731ca5aab111810360fdaf06a0f.eot?#iefix") format("embedded-opentype"),
+       url("fontcustom_a6161731ca5aab111810360fdaf06a0f.woff") format("woff"),
+       url("fontcustom_a6161731ca5aab111810360fdaf06a0f.ttf") format("truetype"),
+       url("fontcustom_a6161731ca5aab111810360fdaf06a0f.svg#fontcustom") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[data-icon]:before { content: attr(data-icon); }
+
+[data-icon]:before,
+.icon-thermometer50:before,
+.icon-sea1:before,
+.icon-lightning:before,
+.icon-sun8:before,
+.icon-cloud46:before,
+.icon-snowflake3:before,
+.icon-barometer:before,
+.icon-foggy5:before,
+.icon-cloudy19:before,
+.icon-simple33:before,
+.icon-winds4:before,
+.icon-dark20:before,
+.icon-sunrise4:before,
+.icon-earth16:before,
+.icon-cloud310:before,
+.icon-cloudy1:before,
+.icon-palm12:before,
+.icon-snow41:before,
+.icon-pine7:before,
+.icon-electrical14:before,
+.icon-cold5:before,
+.icon-france:before,
+.icon-sun79:before,
+.icon-eiffel4:before,
+.icon-camera69:before,
+.icon-rain4:before,
+.icon-moon144:before,
+.icon-map105:before,
+.icon-clouds11:before,
+.icon-rainy12:before,
+.icon-lightning6:before,
+.icon-windy4:before {
+  font-family: "fontcustom";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  text-decoration: inherit;
+}
+
+.icon-thermometer50:before { content: "\f100"; }
+.icon-sea1:before { content: "\f101"; }
+.icon-lightning:before { content: "\f102"; }
+.icon-sun8:before { content: "\f103"; }
+.icon-cloud46:before { content: "\f104"; }
+.icon-snowflake3:before { content: "\f105"; }
+.icon-barometer:before { content: "\f106"; }
+.icon-foggy5:before { content: "\f107"; }
+.icon-cloudy19:before { content: "\f108"; }
+.icon-simple33:before { content: "\f109"; }
+.icon-winds4:before { content: "\f10a"; }
+.icon-dark20:before { content: "\f10b"; }
+.icon-sunrise4:before { content: "\f10c"; }
+.icon-earth16:before { content: "\f10d"; }
+.icon-cloud310:before { content: "\f10e"; }
+.icon-cloudy1:before { content: "\f10f"; }
+.icon-palm12:before { content: "\f110"; }
+.icon-snow41:before { content: "\f111"; }
+.icon-pine7:before { content: "\f112"; }
+.icon-electrical14:before { content: "\f113"; }
+.icon-cold5:before { content: "\f114"; }
+.icon-france:before { content: "\f115"; }
+.icon-sun79:before { content: "\f116"; }
+.icon-eiffel4:before { content: "\f117"; }
+.icon-camera69:before { content: "\f118"; }
+.icon-rain4:before { content: "\f119"; }
+.icon-moon144:before { content: "\f11a"; }
+.icon-map105:before { content: "\f11b"; }
+.icon-clouds11:before { content: "\f11c"; }
+.icon-rainy12:before { content: "\f11d"; }
+.icon-lightning6:before { content: "\f11e"; }
+.icon-windy4:before { content: "\f11f"; }
