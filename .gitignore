@@ -45,3 +45,4 @@ config/database.yml
 #.rvmrc
 #
 config/deploy*
+/bin/vpn
