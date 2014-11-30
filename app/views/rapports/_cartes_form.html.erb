@@ -1,0 +1,215 @@
+<% if domaine.cartes.any? %>
+  <div class="panel-group" id="accordion<%=d%>" role="tablist" aria-multiselectable="true">
+    <% c = 0 %>
+    <% domaine.cartes.each do |carte| c+=1 %>
+      <%= f.fields_for :cartes, carte do |ff| %>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </span>
+                <%= ff.text_field :echeance, class: "form-control" %>
+                <div class="input-group-btn">
+                  <a class="btn btn-default"  href="#d<%=d%>c<%=c%>" data-toggle="collapse" data-parent="#accordion<%=d%>>" aria-expanded="true" aria-controls="d<%=d%>c<%=c%>">
+                    <i class="fa fa-edit"></i>
+                    Plus
+                    <span class="caret"></span>
+                  </a>
+                </div>
+             </div>
+            </h4>
+          </div>
+          <div id="d<%=d%>c<%=c%>" class="panel-collapse collapse <%= '_in' if c == 1 %>" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              <% if carte.villes.any? %>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th><i class="fa fa-crosshairs"></i> Ville</th>
+                      <th><i class="fa icon-thermometer50"></i> Température</th>
+                      <th><i class="fa fa-sun-o"></i> UV</th>
+                      <th><i class="fa fa-flag"></i> Temps sensible</th>
+                      <th><i class="fa icon-winds4"></i> Vent</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% carte.villes.each do |ville| %>
+                      <%= ff.fields_for :villes, ville do |fff| %>
+                        <tr>
+                          <th>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                              </span>
+                              <%= fff.text_field :nom, class: "form-control" %>
+                            </div>
+                          </th>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa icon-thermometer50"></i>
+                              </span>
+                              <%= fff.text_field :temperature, class: "form-control" %>
+                              <span class="input-group-addon">
+                                <i class="fa icon-cold5"></i>
+                              </span>
+                              <%= fff.text_field :temperature_min, class: "form-control" %>
+                              <span class="input-group-addon">
+                                <i class="fa icon-barometer"></i>
+                              </span>
+                              <%= fff.text_field :temperature_max, class: "form-control" %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa fa-sun-o"></i>
+                              </span>
+                              <%= fff.text_field :uv, class: "form-control" %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                  <i class="fa fa-flag"></i>
+                              </span>
+                              <%= fff.text_field :temps_sensible, class: "form-control" %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa fa-dashboard"></i>
+                              </span>
+                              <%= fff.text_field :vent_vitesse, class: "form-control" %>
+                              <span class="input-group-addon">
+                                <i class="fa fa-compass"></i> 
+                              </span>
+                              <%= fff.text_field :vent_direction, class: "form-control" %>
+                            </div>
+                          </td>
+                        </tr>
+                      <% end %>
+                    <% end %>
+                  </tbody>
+                </table>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+<!--
+
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-pills" role="tablist">
+        <% c = 0 %>
+        <% domaine.cartes.each do |carte| c+=1 %>
+          <%= f.fields_for :cartes, carte do |ff| %>
+            <li role="presentation" class="<%= 'active' if c == 1 %>">
+              <a href="#d<%=d%>c<%=c%>" aria-controls="d<%=d%>c<%=c%>" role="tab" data-toggle="tab">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </span>
+                <%= ff.text_field :echeance, class: "form-control" %>
+              </div>
+              </a>
+            <li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-12">
+      <div class="tab-content">
+        <% c = 0 %>
+        <% domaine.cartes.each do |carte| c+=1 %>
+          <%= f.fields_for :cartes, carte do |ff| %>
+            <div role="tabpanel" class="tab-pane fade <%= 'in active' if c == 1 %>" id="d<%=d%>c<%=c%>">
+              <% if carte.villes.any? %>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th><i class="fa fa-crosshairs"></i> Ville</th>
+                      <th><i class="fa icon-thermometer50"></i> Température</th>
+                      <th><i class="fa fa-sun-o"></i> UV</th>
+                      <th><i class="fa fa-flag"></i> Temps sensible</th>
+                      <th><i class="fa icon-winds4"></i> Vent</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% carte.villes.each do |ville| %>
+                      <%= ff.fields_for :villes, ville do |fff| %>
+                        <tr>
+                          <th>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                              </span>
+                              <%= fff.text_field :nom, class: "form-control" %>
+                            </div>
+                          </th>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa icon-thermometer50"></i>
+                              </span>
+                              <%= fff.text_field :temperature, class: "form-control" %>
+                              <span class="input-group-addon">
+                                <i class="fa icon-cold5"></i>
+                              </span>
+                              <%= fff.text_field :temperature_min, class: "form-control" %>
+                              <span class="input-group-addon">
+                                <i class="fa icon-barometer"></i>
+                              </span>
+                              <%= fff.text_field :temperature_max, class: "form-control" %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa fa-sun-o"></i>
+                              </span>
+                              <%= fff.text_field :uv, class: "form-control" %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                  <i class="fa fa-flag"></i>
+                              </span>
+                              <%= fff.text_field :temps_sensible, class: "form-control" %>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-addon">
+                                <i class="fa fa-dashboard"></i>
+                              </span>
+                              <%= fff.text_field :vent_vitesse, class: "form-control" %>
+                              <span class="input-group-addon">
+                                <i class="fa fa-compass"></i> 
+                              </span>
+                              <%= fff.text_field :vent_direction, class: "form-control" %>
+                            </div>
+                          </td>
+                        </tr>
+                      <% end %>
+                    <% end %>
+                  </tbody>
+                </table>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+-->
+<% end %>

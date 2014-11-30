@@ -20,7 +20,7 @@
   </div>
 <% end %>
 
-<table id="rapports" class="table table-striped" data-source="<%= rapports_url(format: "json") %>">
+<table id="rapports" class="table" data-source="<%= rapports_url(format: "json") %>">
   <thead>
     <tr>
       <th>Filename</th>
@@ -40,6 +40,9 @@
     bProcessing: true,
     bServerSide: true,
     sAjaxSource: $('#rapports').data('source'),
+    fnRowCallback: function( $row, row, i ) {
+      $($row).addClass(row[4] ? 'success' : ''); // row[0] => danger/success/...
+    },
     fnDrawCallback: function(settings){
       $(document).trigger('page:change');
     },
@@ -56,11 +59,36 @@
             .append($('<i>').addClass('fa fa-code'))
             .append(' ')
             .append($('<a>').prop({ href:  "/rapports/"+row[3] }).text(data))
+            .append(' ')
+            .append(row[4] ? $('<small>').addClass('label label-success').text('current') : '')
             .html();
         },
         aTargets: [ 0 ]
       },
-      { bVisible: false,  aTargets: [ 3 ] },
+      { 
+        mRender: function (data, type, row) {
+          var $div = $('<div>');
+          var icon = '';
+          $.each(row[1], function(key, value){
+            if(value){
+              switch(key){
+                case 'paris': icon = 'fa icon-eiffel4'; break;
+                case 'france': icon = 'fa icon-france'; break;
+                case 'monde' : icon = 'fa fa-globe'; break;
+                case 'plages': icon = 'fa icon-palm12'; break;
+                case 'neiges': icon = 'fa icon-pine7'; break;
+                case 'ephemerides': icon = 'fa icon-sunrise4'; break;
+                default: icon = '';
+              }
+              $div.append($('<i>').addClass(icon));
+              $div.append(' ');
+            }
+          });
+          console.log($div.html());
+          return $div.html() || "--";
+        },
+        aTargets: [ 1 ]
+      },
       { 
         mRender: function (data, type, row) {
           var datetime = new Date(data);

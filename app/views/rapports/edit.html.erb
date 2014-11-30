@@ -28,7 +28,7 @@
   </div>
 <% end %>
 
-<%= form_for(@rapport, html: {class: "form", id: "rapport_form"}) do |f| %>
+<%= form_for(@rapport, html: {class: "form", id: "rapport_form", multipart: true}) do |f| %>
 
   <% if @rapport.errors.any? %>
     <div id="error_explanation">
@@ -47,21 +47,28 @@
     </div>
   <% end %>
 
-  <div class="form-group info">
+  <% if @rapport.date_str %>
+    <div class="form-group">
+      <h3><i class="fa fa-calendar"></i> Échéance</h3>
+      <%= f.text_field :date_str, class: "form-control" %>
+    </div>
+
+  <% end %>
+
+  <h3><i class="fa fa-info-circle"></i> Infos <small>(unités)</small></h3>
+  <div class="alert alert-info">
     <%= f.text_area :unites, class: "form-control", rows: 4 %>
   </div>
 
-<% if @rapport.ephemerides.any? %>
-  <div class="panel panel-warning">
-    <div class="panel-heading">
-      <h3 class="panel-title"><i class="fa icon-sunrise4"></i> Éphémérides</h3>
+  <% if @rapport.ephemerides.any? %>
+    <h3><i class="fa icon-sunrise4"></i> Éphémérides</h3>
+    <div class="panel panel-warning">
+      <div class="panel-body">
+        <%= render 'ephemeride_form', rapport: @rapport, f: f %>
+      </div>
     </div>
-    <div class="panel-body">
-      <%= render 'ephemeride_form', rapport: @rapport %>
-    </div>
-  </div>
-<% end %>
-
-<%= render 'previsions', rapport: @rapport %>
+  <% end %>
+  
+  <%= render 'previsions_form', rapport: @rapport, f: f %>
 
 <% end %>

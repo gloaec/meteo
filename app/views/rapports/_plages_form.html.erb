@@ -1,0 +1,77 @@
+<% if domaine.zones.any? %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><i class="fa fa-crosshairs"></i> Ville</th>
+        <th><i class="fa icon-thermometer50"></i> Température (°C)</th>
+        <th><i class="fa icon-sea1"></i> Mer</th>
+        <th><i class="fa fa-sun-o"></i> UV</th>
+        <th><i class="fa fa-flag"></i> Temps sensible</th>
+        <th><i class="fa icon-winds4"></i> Vent (km/h)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% domaine.zones.each do |zone| %>
+        <%= f.fields_for :zones, zone do |ff| %>
+          <tr>
+            <th>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">
+                  <i class="fa fa-location-arrow"></i>
+                </span>
+                <%= ff.text_field :nom, class: "form-control" %>
+              </div>
+            <td>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">
+                  <i class="fa icon-thermometer50"></i>
+                </span>
+                <%= ff.text_field :temperature, class: "form-control" %>
+              </div>
+            </td>
+            <td>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">
+                  <i class="fa fa-info"></i>
+                </span>
+                <%= ff.text_field :etat_mer, class: "form-control" %>
+                <span class="input-group-addon">
+                  <i class="fa icon-thermometer50"></i>
+                </span>
+                <%= ff.text_field :temperature_mer, class: "form-control" %>
+              </div>
+            </td>
+            <td>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">
+                  <i class="fa fa-sun-o"></i>
+                </span>
+                <%= ff.text_field :uv, class: "form-control" %>
+              </div>
+            </td>
+            <td>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag"></i>
+                </span>
+                <%= ff.text_field :temps_sensible, class: "form-control" %>
+              </div>
+            </td>
+            <td>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">
+                  <i class="fa fa-dashboard"></i>
+                </span>
+                <%= ff.text_field :vent_vitesse, class: "form-control" %>
+                <span class="input-group-addon">
+                  <i class="fa fa-compass"></i> 
+                </span>
+                <%= ff.text_field :vent_direction, class: "form-control" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

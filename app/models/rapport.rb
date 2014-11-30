@@ -7,7 +7,35 @@ class Rapport < ActiveRecord::Base
   before_post_process :import
 
   attr_accessible :xml, :xml_file_name, :xml_content_type, :xml_file_size, :xml_updated_at,
-      :date, :date_str, :rapport_type, :unites, :mtime
+      :date, :date_str, :rapport_type, :unites, :mtime,
+      :ephemerides_attributes, :previsions_attributes
+  accepts_nested_attributes_for :ephemerides, :previsions
+
+
+  def has_paris?
+    self.previsions.with_zone('paris').any? #all.each {|p| if p.domaines.where(zone: 'paris').any? then return true end }
+  end
+
+  def has_france?
+    self.previsions.with_zone('france').any? #all.each {|p| if p.domaines.where(zone: 'france').any? then return true end }
+  end
+
+  def has_monde?
+    self.previsions.with_zone('monde').any? #all.each {|p| if p.domaines.where(zone: 'monde').any? then return true end }
+  end
+
+  def has_plages?
+    self.rapport_type == 'plages'
+    #self.previsions.with_plages.any? #all.each {|p| p.domaines.all.each {|d| if d.zones.where.not(temperature_mer: nil).any? then return true end }}
+  end
+
+  def has_neiges?
+    self.rapport_type == 'neiges'
+  end
+
+  def has_ephemerides?
+    self.ephemerides.any?
+  end
 
   def rapport_path
     if Rails.env == "production"

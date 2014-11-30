@@ -1,0 +1,55 @@
+<% if @rapport.previsions.any? %>
+  <h3><i class="fa icon-cloudy1"></i> Prévisions</h3>
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <% d = 0 %>
+    <% @rapport.previsions.each do |prevision| %>
+      <%= f.fields_for :previsions, prevision do |ff| %>
+        <div class="form-group">
+          <label>Échéance</label>
+          <%= ff.text_field :echeance, class: "form-control" %>
+        </div>
+        <% prevision.domaines.each do |domaine| d+=1 %>
+          <%= ff.fields_for :domaines, domaine do |fff| %>
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <% icon = case (domaine.zone || domaine.nom).downcase
+                     when 'paris'  then 'icon-eiffel4'
+                     when 'france' then 'icon-france'
+                     when 'monde'  then 'fa-globe'
+                     when 'atlantique', 'corse', 'manche', 'mediterranee' then 'icon-sea1'
+                     else ''
+                     end
+                  %>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <i class="fa <%= icon %>"></i>
+                    </span>
+                    <% if domaine.zone %>
+                      <%= fff.text_field :zone, class: 'form-control' %>
+                    <% end %>
+                    <% if domaine.nom %>
+                      <%= fff.text_field :nom, class: 'form-control' %>
+                    <% end %>
+                    <div class="input-group-btn">
+                      <a class="btn btn-default"  href="#d<%=d%>" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="d<%=d%>">
+                        <i class="fa fa-edit"></i>
+                        Plus
+                        <span class="caret"></span>
+                      </a>
+                    </div>
+                </h3>
+              </div>
+              <div id="d<%=d%>" class="panel-collapse collapse <%= '_in' if d == 1 %>" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                  <%= render 'plages_form', domaine: domaine, d: d, f: fff %>
+                  <%= render 'cartes_form', domaine: domaine, d: d, f: fff %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

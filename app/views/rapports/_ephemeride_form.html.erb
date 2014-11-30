@@ -1,0 +1,50 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><i class="fa fa-calendar"></i> Échéance</th>
+      <th><i class="fa icon-sun79"></i> Lever</th>
+      <th><i class="fa icon-camera69"></i> Coucher</th>
+      <th><i class="fa fa-area-chart"></i> Variation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% rapport.ephemerides.each do |ephemeride| %>
+      <%= f.fields_for :ephemerides, ephemeride do |ff| %>
+        <tr>
+          <th>
+            <div class="input-group input-group-sm">
+              <span class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </span>
+              <%= ff.text_field :echeance, class: "form-control" %>
+            </div>
+          </th>
+          <td>
+            <div class="input-group input-group-sm">
+              <span class="input-group-addon">
+                <i class="fa icon-sun79"></i>
+              </span>
+              <%= ff.text_field :lever, class: "form-control" %>
+            </div>
+          </td>
+          <td>
+            <div class="input-group input-group-sm">
+              <span class="input-group-addon">
+                <i class="fa icon-camera69"></i>
+              </span>
+              <%= ff.text_field :coucher, class: "form-control" %>
+            </div>
+          </td>
+          <td>
+            <div class="input-group input-group-sm">
+              <span class="input-group-addon">
+                <i class="fa fa-area-chart"></i>
+              </span>
+              <%= ff.text_field :variation, class: "form-control" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

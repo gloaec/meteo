@@ -33,6 +33,11 @@
   <% end %>
 
   <% if @rapport.previsions.any? %>
-    <%= render 'domaine', domaine: @rapport.previsions.first.domaines.where(zone: 'paris').last, d: 0 %>
+      <% domaine = @rapport.previsions.first.domaines.where(zone: 'paris').last %>
+      <% if domaine.nil? %>
+          <div class="alert alert-danger">Pas de prévisions "paris" dans le dernier rapport</div>
+      <% else %>
+         <%= render 'domaine', domaine: domaine, d: 0 %>
+      <% end %>
   <% end %>
 <% end %>

@@ -20,11 +20,20 @@ private
     rapports.map do |rapport|
       display_name = "<i class='fa fa-code'></i> #{rapport.xml_file_name}".html_safe
       updated_at = "<span class='timeago' data-sort='#{rapport.updated_at}' data-datetime='#{rapport.updated_at}'></span>"
+      infos = {
+        paris: rapport.has_paris?,
+        france: rapport.has_france?,
+        monde: rapport.has_monde?,
+        plages: rapport.has_plages?,
+        neiges: rapport.has_neiges?,
+        ephemerides: rapport.has_ephemerides?
+      }
       [
         rapport.xml_file_name, #link_to(display_name, rapport),
-        rapport.rapport_type, # 'icon-france'
+        infos, #rapport.rapport_type, # 'icon-france'
         rapport.updated_at,
-        rapport.id
+        rapport.id,
+        !rapport.rapport_type.nil? && rapport == Rapport.where(rapport_type: rapport.rapport_type).order(:updated_at).last
       ]
     end
   end

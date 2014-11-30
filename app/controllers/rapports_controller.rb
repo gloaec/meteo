@@ -5,27 +5,27 @@ class RapportsController < ApplicationController
   #before_action :set_rapport, only: [:show, :edit, :update, :destroy, :events]
 
   def ephemerides
-    @rapport = Rapport.where(rapport_type: :standard).last
+    @rapport = Rapport.where(rapport_type: :standard).order(:updated_at).last
   end
 
   def paris
-    @rapport = Rapport.where(rapport_type: :standard).last
+    @rapport = Rapport.where(rapport_type: :standard).order(:updated_at).last
   end
 
   def france
-    @rapport = Rapport.where(rapport_type: :standard).last
+    @rapport = Rapport.where(rapport_type: :standard).order(:updated_at).last
   end
 
   def monde
-    @rapport = Rapport.where(rapport_type: :standard).last
+    @rapport = Rapport.where(rapport_type: :standard).order(:updated_at).last
   end
 
   def plages
-    @rapport = Rapport.where(rapport_type: :plages).last
+    @rapport = Rapport.where(rapport_type: :plages).order(:updated_at).last
   end
 
   def neiges
-    @rapport = Rapport.where(rapport_type: :neiges).last
+    @rapport = Rapport.where(rapport_type: :neiges).order(:updated_at).last
   end
 
   # GET /rapports/refresh
@@ -85,7 +85,7 @@ class RapportsController < ApplicationController
 
     respond_to do |format|
       if @rapport.save
-        format.html { redirect_to @rapport, notice: 'Channel was successfully created.' }
+        format.html { redirect_to @rapport, notice: 'Rapport was successfully created.' }
         format.json { render action: 'show', status: :created, location: @rapport }
       else
         format.html { render action: 'new' }
@@ -99,7 +99,7 @@ class RapportsController < ApplicationController
   def update
     respond_to do |format|
       if @rapport.update(rapport_params)
-        format.html { redirect_to @rapport, notice: 'Channel was successfully updated.' }
+        format.html { redirect_to @rapport, notice: 'Rapport was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -130,8 +130,28 @@ class RapportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def rapport_params
-      params.require(:rapport).permit(:name, :queue_path, :error_path,
-          :min_duration_error, :min_duration_warning, :min_gap_error, :min_gap_warning,
-          :max_duration_error, :max_duration_warning, :max_gap_error, :max_gap_warning)
+      params.require(:rapport).permit(:echeance,
+        ephemerides_attributes: [
+          :id, :echeance, :lever, :coucher, :variation
+        ],
+        previsions_attributes: [
+          :id, :echeance,
+          domaines_attributes: [
+            :id, :zone, :nom,
+            cartes_attributes: [
+              :id, :echeance,
+              villes_attributes: [
+                :id, :nom, :temperature, :temperature_min, :temperature_max, 
+                :uv, :temps_sensible, :vent_vitesse, :vent_direction
+              ]
+            ],
+            zones_attributes: [
+              :id, :nom, :temperature, :temperature_min, :temperature_max, 
+              :uv, :temps_sensible, :vent_vitesse, :vent_direction,
+              :temperature_mer, :etat_mer, :lamb_x, :lamb_y
+            ]
+          ]
+        ]        
+      )
     end
 end
