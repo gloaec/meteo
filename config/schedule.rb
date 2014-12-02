@@ -1,4 +1,4 @@
-require File.expand_path('../config/environment', __FILE__)
+require File.expand_path('../environment', __FILE__)
  
 upload_interval = Setting.for('Intervalle de rafraîchissement FTP (min)').value || 15
 
