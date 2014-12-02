@@ -2,6 +2,17 @@ require 'nokogiri'
 require 'net/ftp'
 require 'timeout'
 
+#spec = Gem::Specification.find_by_name 'whenever'
+#load "#{spec.gem_dir}/lib/whenever/tasks/whenever.rake"
+
+namespace :whenever do
+  desc "Whenever update crontab"
+  task :update_crontab do  
+    `cd #{Rails.root} && RAILS_ENV=production \
+     bundle exec whenever --update-crontab NrjMeteo --set environment=production --roles db`
+  end
+end
+
 namespace :db do
   desc "Database Re-Install"
   task :install do  
