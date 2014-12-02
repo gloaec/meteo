@@ -9,6 +9,11 @@ class SettingsController < ApplicationController
     if @settings.all?(&:valid?)
       @settings.each { |s| s.save }
     end
+    if Rails.env == 'production'
+      `cd #{Rails.root} && RAILS_ENV=production \
+       bundle exec rake whenever:update_crontab`
+    end
+    flash[:notice] = "Les paramètres ont correctement été mis à jour"
     redirect_to settings_path
   end
 
