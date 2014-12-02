@@ -30,7 +30,7 @@ gem 'momentjs-rails'
 gem 'aescrypt'
 gem 'htmlentities'
 gem 'will_paginate'
-gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+gem 'jquery-datatables-rails'#, github: 'rweng/jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'whenever', :require => false
 gem 'protected_attributes'
