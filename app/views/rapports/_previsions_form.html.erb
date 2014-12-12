@@ -10,7 +10,7 @@
         </div>
         <% prevision.domaines.each do |domaine| d+=1 %>
           <%= ff.fields_for :domaines, domaine do |fff| %>
-            <div class="panel panel-primary">
+            <div class="panel panel-primary bottom10">
               <div class="panel-heading">
                 <h3 class="panel-title">
                   <% icon = case (domaine.zone || domaine.nom).downcase

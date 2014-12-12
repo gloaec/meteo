@@ -1,0 +1,108 @@
+-- SELECT * from `prevision` =
+SET @rapport_type := 'standard';      -- || 'plages' || 'neiges'
+SET @zone         := 'france';        -- || 'paris'  || 'monde'
+SET @nom          := 'Atlantique'; -- || 'Corse' || 'Manche' || 'Mediteranee'
+-- -------------------------------------------------------------------------- --
+SET @jpicto       := 0;
+SET @jtmin        := 0;
+SET @jtmax        := 0;
+
+SELECT CONCAT(
+  'SELECT `villes`.nom AS `Ville`', 
+  GROUP_CONCAT(
+    ', `t_',
+    REPLACE(carte_id, '`', '``'),
+    '`.temps_sensible AS `PictoJ',
+    REPLACE((@jpicto := ifnull(@jpicto, 0) + 1), '`', '``'),
+    '`'
+  SEPARATOR ''),
+  GROUP_CONCAT(
+    ', `t_',
+    REPLACE(carte_id, '`', '``'),
+    '`.temperature_min AS `TempeMinJ',
+    REPLACE((@jtmin := ifnull(@jtmin, 0) + 1), '`', '``'),
+    '`'
+  SEPARATOR ''),
+  GROUP_CONCAT(
+    ', `t_',
+    REPLACE(carte_id, '`', '``'),
+    '`.temperature_max AS `TempeMaxJ',
+    REPLACE((@jtmax := ifnull(@jtmax, 0) + 1), '`', '``'),
+    '`'
+  SEPARATOR ''),
+  ' FROM `villes` ',
+  GROUP_CONCAT(
+    'JOIN `villes` AS `t_',
+    REPLACE(carte_id, '`', '``'),
+    '` ON `villes`.nom = `t_',
+    REPLACE(carte_id, '`', '``'),
+    '`.nom AND `t_',
+    REPLACE(carte_id, '`', '``'),
+    '`.carte_id = ',
+    QUOTE(carte_id)
+  SEPARATOR ''),
+  ' GROUP BY `villes`.nom'
+) INTO @qry FROM (
+  SELECT DISTINCT `villes`.carte_id
+  FROM  `villes` -- , `cartes`, `domaines`, `previsions`, `rapports`
+  JOIN `cartes` 
+    ON  `cartes`.id = `villes`.carte_id
+  JOIN `domaines` 
+    ON  `domaines`.id = `cartes`.domaine_id
+    AND (`domaines`.zone = (@zone) COLLATE utf8_unicode_ci
+      OR `domaines`.nom = (@nom) COLLATE utf8_unicode_ci -- plages
+    )
+  JOIN `previsions` 
+    ON  `previsions`.id = `domaines`.prevision_id
+  JOIN `rapports` 
+    ON  `rapports`.id = `previsions`.rapport_id
+    AND `previsions`.rapport_id = (
+      SELECT `rapports`.id
+      FROM `rapports`
+      WHERE `rapports`.rapport_type = (@rapport_type) COLLATE utf8_unicode_ci
+      ORDER BY `rapports`.updated_at DESC
+      LIMIT 1
+    )
+  ORDER BY `villes`.carte_id ASC
+
+--   WHERE `cartes`.id     = `villes`.carte_id
+--     AND `domaines`.id   = `cartes`.domaine_id
+--     AND `previsions`.id = `domaines`.prevision_id
+--     AND `domaines`.zone = (@zone) COLLATE utf8_unicode_ci
+--     -- OR `domaines`.nom = (@nom) COLLATE utf8_unicode_ci -- plages
+--     AND `previsions`.rapport_id = (
+--       SELECT `rapports`.id
+--       FROM `rapports`
+--       WHERE `rapports`.rapport_type = (@rapport_type) COLLATE utf8_unicode_ci
+--       ORDER BY `rapports`.updated_at ASC
+--       LIMIT 1
+--     )
+--     ORDER BY `villes`.carte_id ASC
+
+--  WHERE `villes`.carte_id IN (
+--    SELECT `cartes`.id
+--    FROM `cartes`
+--    WHERE `cartes`.domaine_id
+--    IN (
+--      SELECT `domaines`.id
+--      FROM `domaines`
+--      WHERE `domaines`.zone = (@zone) COLLATE utf8_unicode_ci
+--      -- OR `domaines`.nom = (@nom) COLLATE utf8_unicode_ci -- plages
+--      AND `domaines`.prevision_id
+--      IN (
+--        SELECT `previsions`.id
+--        FROM `previsions`
+--        WHERE `previsions`.rapport_id = (
+--          SELECT `rapports`.id
+--          FROM `rapports`
+--          WHERE `rapports`.rapport_type = (@rapport_type) COLLATE utf8_unicode_ci
+--          ORDER BY `rapports`.updated_at ASC
+--          LIMIT 1
+--        )
+--      )
+--    )
+--  )
+) t;
+
+PREPARE stmt FROM @qry;
+EXECUTE stmt;

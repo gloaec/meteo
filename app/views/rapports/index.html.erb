@@ -26,6 +26,7 @@
       <th>Filename</th>
       <th>Infos</th>
       <th>Modified</th>
+      <th>&nbsp;</th>
     </tr>
   </thead>
   <tbody>
@@ -48,6 +49,7 @@
     },
     order: [[ 2, "desc" ]],
     aoColumns: [
+      null,
       null,
       null,
       null
@@ -95,6 +97,31 @@
           return moment(datetime).fromNow();
         },
         aTargets: [2]
+      },
+      { 
+        mRender: function (data, type, row) {
+            return $('<div>').append($('<div>').addClass('pull-right')
+            .append(
+                $('<a>')
+                .attr({ href: '/rapports/'+row[3]+'/edit' })
+                .addClass('btn btn-primary btn-xs')
+                .append($('<i>').addClass('fa fa-edit'))
+                .append(' Edit')
+            )
+            .append(' ')
+            .append(
+                $('<a>')
+                .attr({ 
+                    'href': '/rapports/'+row[3],
+                    'data-method': 'delete',
+                    'data-confirm': 'Are you sure ?'
+                })
+                .addClass('btn btn-danger btn-xs')
+                .append($('<i>').addClass('fa fa-edit'))
+                .append(' Delete')
+            )).html();
+        },
+        aTargets: [3]
       }
     ]
   });

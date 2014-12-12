@@ -1,0 +1,11 @@
+Bonjour Agnes,
+
+La requête ci dessus est bien en (My)SQL. MySQL fournissant des extensions au langage SQL, toutes les requêtes SQL sont éxécutables par le moteur MySQL, il suffisait d'essayer...
+
+Pour ce qui est du code de l'habillage, .NET est le framework, Visual Basic est le langage. Bref, des technos propriétaires de chez Microsoft dans lesquelles je ne mettrerais certainement pas le nez (sans offenses, je suis juste allergique, et je n'ai dans tous les cas pas de license Windows et encore moins de license Visual Studio).
+
+Donc, pour récapituler la situation, je vais commencer par faire une petite rétrospective sur le projet :
+
+La demande initiale était de concevoir une base de donnée capable d'héberger les données météo standards et d'ajouter la possibilité d'y stocker les prévsions pour les météos plages et neiges. Je n'ai d'ailleurs à l'heure actuelle toujours aucune information sur la manière dont sont conçues les prévisions des neiges, donc cette partie n'est toujours pas implémentée (!). Bref, la demande suggerait assez explicitement un travail de developement sur l'habillage pour y intégrer les prévisions plages et neiges. Nous avons communiqué un schéma prévisionnel de la base après la phase d'analyse afin d'en faire valider la structure avant de se lancer dans le code. La base de donnée est le pillier de l'application, peut-être a-t-il été approuvé un peu trop vite, dans tous les cas, maintenant ça coince...
+
+Je veux bien mettre toute la bonne volonté du monde pour essayer d'expliquer et guider un maximum les adaptations à faire sur l'habillage, mais à un moment donné, vous semblez manquer cruellement d'implication dans ce projet. 
